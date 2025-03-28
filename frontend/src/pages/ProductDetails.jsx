@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import products from "../product.js";
 import BreadCrumb from "../components/BreadCrumb.jsx";
 import QuantitySelector from "../components/QuantitySelector.jsx";
+import Rating from "../components/Rating.jsx";
 
 const ProductDetails = () => {
 	const [product, setProduct] = useState();
@@ -32,6 +33,9 @@ const ProductDetails = () => {
 						<h1 className="text-2xl font-semibold text-green-800 mt-5">
 							Rs {product.min_price} - Rs {product.max_price}
 						</h1>
+						<div className="mt-2">
+							<Rating value={product.rating} text={`${product.numReviews} reviews`} />
+						</div>
 						<p className="mt-8 text-lg text-gray-600 text-justify">
 							{product.description}
 						</p>
