@@ -1,0 +1,7 @@
+@font-face {
+    font-family: Spartan;
+    src: url('../src/assets/fonts/LeagueSpartan-Regular.ttf');
+}
+
+@import 'tailwindcss'
+
