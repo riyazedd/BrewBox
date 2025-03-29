@@ -1,9 +1,20 @@
-import React from "react";
+import {React,useState,useEffect} from "react";
 import Banner from "../components/Banner";
 import ProductCard from "../components/ProductCard";
-import products from "../product.js";
+import API from "../API";
 
 const HomePage = (props) => {
+	const [products,setProducts]=useState([]);
+
+	useEffect(()=>{
+		const fetchProducts=async()=>{
+			const {data}=await API.get('/api/products');
+			setProducts(data)
+		}
+		fetchProducts();
+	},[])
+
+	// console.log(products);
 	return (
 		<div>
 			<Banner title={props.title} />

@@ -1,19 +1,23 @@
 import { React, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import products from "../product.js";
 import BreadCrumb from "../components/BreadCrumb.jsx";
 import QuantitySelector from "../components/QuantitySelector.jsx";
 import Rating from "../components/Rating.jsx";
+import API from "../API.jsx";
 
 const ProductDetails = () => {
 	const [product, setProduct] = useState();
-  const [size,setSize]=useState("250");
-  const [quantity, setQuantity] = useState(1);
+  	const [size,setSize]=useState("250");
+  	const [quantity, setQuantity] = useState(1);
 	const { id: productId } = useParams();
 
 	useEffect(() => {
-		const prod = products.find((product) => String(product._id) === productId);
-		setProduct(prod);
+		const fetchProduct = async()=>{
+			const {data}=await API.get(`/api/products/${productId}`);
+			setProduct(data)
+		}
+
+		fetchProduct();
 	}, [productId]);
 
 	return (

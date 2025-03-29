@@ -23,15 +23,11 @@ const reviewSchema = mongoose.Schema({
 })
 
 const productSchema= new mongoose.Schema({
-    name:{
+    product_name:{
         type: String,
         required: true
     },
     image:{
-        type: String,
-        required: true
-    },
-    brand:{
         type: String,
         required: true
     },
@@ -43,7 +39,12 @@ const productSchema= new mongoose.Schema({
         type: String,
         required: true
     },
-    price:{
+    min_price:{
+        type: Number,
+        required: true,
+        default:0
+    },
+    max_price:{
         type: Number,
         required: true,
         default:0
