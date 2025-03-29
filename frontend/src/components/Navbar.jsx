@@ -5,7 +5,7 @@ import {CiShoppingCart, CiUser} from 'react-icons/ci'
 const Navbar = () => {
   return (
     <div className='w-full h-auto shadow-md flex items-center justify-between'>
-        <img src="/logo.png" alt="logo" className='w-30 ml-30' />
+        <Link to="/"><img src="/logo.png" alt="logo" className='w-30 ml-30' /></Link>
         <ul className='flex gap-10'>
             <Link to='/'><li>SHOP</li></Link>
             <Link to='/subscription'><li>SUBSCRIPTION</li></Link>
