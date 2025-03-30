@@ -1,24 +1,28 @@
-import {React,useState,useEffect} from "react";
+// import {React,useState,useEffect} from "react";
 import Banner from "../components/Banner";
 import ProductCard from "../components/ProductCard";
-import API from "../API";
+// import API from "../API";
+import { useGetProductsQuery } from "../slices/productApiSlice";
 
 const HomePage = (props) => {
-	const [products,setProducts]=useState([]);
+	// const [products,setProducts]=useState([]);
 
-	useEffect(()=>{
-		const fetchProducts=async()=>{
-			const {data}=await API.get('/api/products');
-			setProducts(data)
-		}
-		fetchProducts();
-	},[])
+	// useEffect(()=>{
+	// 	const fetchProducts=async()=>{
+	// 		const {data}=await API.get('/api/products');
+	// 		setProducts(data)
+	// 	}
+	// 	fetchProducts();
+	// },[])
 
 	// console.log(products);
+
+	const {data:products,isLoading,error}=useGetProductsQuery();
 	return (
 		<div>
 			<Banner title={props.title} />
-			<div className="flex justify-center">
+			{isLoading ? (<div><h1>Loading...</h1></div>) : error ? (<div>{error.data.message || error.error}</div>) : (<>
+				<div className="flex justify-center">
                 <p></p>
 				<div className="grid grid-cols-3 m-10 gap-10 w-2/3">
 					{products.map((p) => (
@@ -26,6 +30,7 @@ const HomePage = (props) => {
 					))}
 				</div>
 			</div>
+			</>)}
 		</div>
 	);
 };
