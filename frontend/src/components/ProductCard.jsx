@@ -5,7 +5,7 @@ import Rating from './Rating.jsx'
 const ProductCard = ({product}) => {
   return (
     <Link to={`/product/${product._id}`}>
-        <div className='p-5 w-fit shadow rounded'>
+        <div className='p-5 w-fit shadow rounded hover:shadow-lg transition ease-in-out duration-300'>
             <img src={product.image} alt="coffee" className='w-70' />
             <div className='flex flex-col items-center gap-3'>
                 <p className='text-lg font-[Poppins]'>{product.product_name}</p>
