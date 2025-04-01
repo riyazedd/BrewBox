@@ -3,7 +3,7 @@ import asyncHandler from './asyncHandler.js'
 import User from '../models/userModel.js'
 
 //protect routes
-const protect = asyncHandler(async(req,res)=>{
+const protect = asyncHandler(async(req,res,next)=>{
     let token;
 
     //read jwt from cookie
@@ -27,7 +27,7 @@ const admin = (req,res,next)=>{
     if(req.user && req.user.isAdmin){
         next()
     }else{
-         res.status(401).json({message:'not authorizedas admin'})
+         res.status(401).json({message:'not authorized as admin'})
     }
 }
 
