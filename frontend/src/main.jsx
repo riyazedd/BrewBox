@@ -11,6 +11,7 @@ import SubscriptionPage from './pages/SubscriptionPage.jsx'
 import AboutUsPage from './pages/AboutUsPage.jsx'
 import ContactUsPage from './pages/ContactUsPage.jsx'
 import CartPage from './pages/CartPage.jsx'
+import LoginPage from './pages/LoginPage.jsx'
 
 const router=createBrowserRouter(
   createRoutesFromElements(
@@ -20,7 +21,9 @@ const router=createBrowserRouter(
       <Route path='/about-us' element={<AboutUsPage title="about us" />}/>
       <Route path='/contact-us' element={<ContactUsPage title="contact us" />}/>
       <Route path='/cart' element={<CartPage title="Your Cart" />}/>
-      <Route path='/product/:id' element={<ProductDetails />} title/>
+      <Route path='/login' element={<LoginPage title="Login" />}/>
+      <Route path='/product/:id' element={<ProductDetails />} />
+      
     </Route>
   )
 )
