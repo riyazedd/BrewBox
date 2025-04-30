@@ -4,9 +4,17 @@ import {CiShoppingCart, CiUser} from 'react-icons/ci'
 import { useSelector } from 'react-redux'
 
 const Navbar = () => {
-  const [active,setActive]= useState('');
+  const [active,setActive]= useState('home');
   const {cartItems} = useSelector((state) => state.cart);
-  // console.log(cartItems);
+  const {userInfo} = useSelector((state) => state.auth);
+
+  const name = userInfo.name.split(' ');
+  const firstname = name[0];
+
+  const logoutHandler=()=>{
+    console.log("logout")
+  }
+  
   return (
     <div className='w-full h-auto shadow-md flex items-center justify-between '>
         <Link to="/"><img src="/logo.png" alt="logo" className='w-30 ml-30' /></Link>
@@ -17,7 +25,37 @@ const Navbar = () => {
             <Link to='/contact-us' onClick={()=>setActive('contact')}><li className={`${active==='contact' ? 'underline underline-offset-4 font-bold text-green-900' : '' }`}>CONTACT US</li></Link>
         </ul>
         <div className='flex gap-6 text-3xl mr-30'>
-           <Link to='/login' onClick={()=>setActive('')}> <CiUser /></Link>
+
+        {userInfo ? (<div className="group relative inline-block">
+         
+          
+          <CiUser className="cursor-pointer" />
+          
+          <div className="absolute top-5 right-0 mt-2 hidden w-40 rounded-md bg-white shadow-lg group-hover:block z-50">
+            <ul className="py-1 text-lg text-gray-700">
+            <p className="block px-4 py-2">Hello, {firstname}</p>
+              <li>
+                <Link
+                  to="/profile"
+                  className="block px-4 py-2 hover:bg-gray-100"
+                  onClick={() => setActive('')}
+                >
+                  Profile
+                </Link>
+              </li>
+              <li>
+              <Link
+                  to="/logout"
+                  className="block px-4 py-2 hover:bg-gray-100"
+                  onClick={logoutHandler}
+                >
+                  Logout
+                </Link>
+              </li>
+            </ul>
+          </div>
+        </div>) : (<Link to='/login' onClick={()=>setActive('')}> <CiUser /></Link>)}
+           
             <Link to='/cart' onClick={()=>setActive('')} className='relative'><CiShoppingCart  />
             {cartItems.length > 0 && (
             <span className="absolute top-[-8px] right-[-8px] bg-red-600 text-white text-sm px-2 rounded-full">

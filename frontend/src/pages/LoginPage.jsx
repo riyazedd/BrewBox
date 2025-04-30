@@ -1,17 +1,49 @@
-import {useState} from 'react'
-import { Link } from 'react-router-dom'
+import {useState, useEffect} from 'react'
+import { Link, useLocation,useNavigate } from 'react-router-dom'
 import Banner from '../components/Banner'
+import { useDispatch,useSelector } from 'react-redux'
+import { useLoginMutation } from '../slices/usersApiSlice'
+import {setCredentials} from '../slices/authSlice'
+import { toast } from 'react-toastify'
 
 const LoginPage = (props) => {
     const [email,setEmail]=useState('');
     const [password,setPassword]=useState('');
+
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    const [login,{isLoading}]= useLoginMutation();
+
+    const {userInfo} = useSelector((state)=>state.auth);
+
+    const {search}=useLocation();
+    const sp = new URLSearchParams(search);
+    const redirect = sp.get('redirect') || '/';
+
+    useEffect(()=>{
+      if(userInfo){
+        navigate(redirect);
+      }
+    },[userInfo,redirect,navigate]);
+
+    const submitHandler= async (e)=>{
+      e.preventDefault();
+      try{
+        const res = await login({email,password}).unwrap();
+        dispatch(setCredentials({...res,}));
+        navigate(redirect);
+      }catch(err){
+        toast.error(err?.data?.message || err.error);
+      }
+    }
 
   return (
     <div>
       <Banner title={props.title} />
 
       <div className='flex flex-col items-center gap-5'>
-        <form className='w-1/3 mt-10 flex flex-col gap-6'>
+        <form onSubmit={submitHandler} className='w-1/3 mt-10 flex flex-col gap-6'>
             <div className='flex flex-col gap-2'>
             <label className='text-xl font-semibold text-gray-600'  htmlFor="email">Email</label>
             <input className='border rounded p-2 text-lg' type="text" placeholder='example@gmail.com' value={email} onChange={(e)=>setEmail(e.target.value)} />
@@ -20,10 +52,10 @@ const LoginPage = (props) => {
             <label className='text-xl font-semibold text-gray-600' htmlFor="password">Password</label>
             <input className='border rounded p-2 text-lg' type="password" placeholder='Enter Password' value={password} onChange={(e)=>setPassword(e.target.value)} />
             </div>
-            <button className='py-3 px-7 bg-green-800 text-lg text-white font-semibold rounded hover:bg-green-700 hover:cursor-pointer'>Login</button>
+            <button type='submit' className='py-3 px-7 bg-green-800 text-lg text-white font-semibold rounded hover:bg-green-700 hover:cursor-pointer'>Login</button>
         </form>
         <div className='text-lg'>
-            <p>New Customer? <Link to='/register' className='underline text-green-700'>Register</Link></p>
+            <p>New Customer? <Link to={redirect ? `/register?redirect=${redirect}` : '/'} className='underline text-green-700'>Register</Link></p>
         </div>
       </div>
     </div>
