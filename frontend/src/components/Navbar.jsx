@@ -1,18 +1,36 @@
-import {React,useState} from 'react'
-import { Link } from 'react-router-dom'
+import {React,useState,useEffect} from 'react'
+import { Link,useNavigate } from 'react-router-dom'
 import {CiShoppingCart, CiUser} from 'react-icons/ci'
-import { useSelector } from 'react-redux'
+import { useLogoutMutation } from '../slices/usersApiSlice'
+import {logout} from '../slices/authSlice'
+import { useSelector, useDispatch } from 'react-redux'
 
 const Navbar = () => {
   const [active,setActive]= useState('home');
+  const[firstname ,setFirstName]=useState();
   const {cartItems} = useSelector((state) => state.cart);
   const {userInfo} = useSelector((state) => state.auth);
 
-  const name = userInfo.name.split(' ');
-  const firstname = name[0];
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const logoutHandler=()=>{
-    console.log("logout")
+  useEffect(() => {
+    if (userInfo) {
+      const name = userInfo.name.split(' ');
+      setFirstName(name[0]);
+    }
+  }, [userInfo]);
+
+  const [logoutApiCall] = useLogoutMutation();
+
+  const logoutHandler=async()=>{
+    try{
+      await logoutApiCall().unwrap();
+      dispatch(logout());
+      navigate('/login')
+    }catch(err){
+      console.log(err)
+    }
   }
   
   return (
@@ -45,7 +63,7 @@ const Navbar = () => {
               </li>
               <li>
               <Link
-                  to="/logout"
+                  to="#"
                   className="block px-4 py-2 hover:bg-gray-100"
                   onClick={logoutHandler}
                 >
