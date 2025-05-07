@@ -5,6 +5,7 @@ import { Provider } from 'react-redux'
 import store from './store.js'
 import './index.css'
 import App from './App.jsx'
+import PrivateRoute from './components/PrivateRoute.jsx'
 import HomePage from './pages/HomePage.jsx'
 import ProductDetails from './pages/ProductDetails.jsx'
 import SubscriptionPage from './pages/SubscriptionPage.jsx'
@@ -13,6 +14,7 @@ import ContactUsPage from './pages/ContactUsPage.jsx'
 import CartPage from './pages/CartPage.jsx'
 import LoginPage from './pages/LoginPage.jsx'
 import RegisterPage from './pages/RegisterPage.jsx'
+import ShippingPage from './pages/ShippingPage.jsx'
 
 const router=createBrowserRouter(
   createRoutesFromElements(
@@ -25,6 +27,10 @@ const router=createBrowserRouter(
       <Route path='/login' element={<LoginPage title="Login" />}/>
       <Route path='/register' element={<RegisterPage title="Sign Up" />}/>
       <Route path='/product/:id' element={<ProductDetails />} />
+
+      <Route path='' element={<PrivateRoute />}>
+        <Route path='/shipping' element={<ShippingPage title="Shipping"/>} />
+      </Route>
       
     </Route>
   )

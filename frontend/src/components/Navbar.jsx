@@ -72,7 +72,34 @@ const Navbar = () => {
               </li>
             </ul>
           </div>
-        </div>) : (<Link to='/login' onClick={()=>setActive('')}> <CiUser /></Link>)}
+        </div>) : (<div className="group relative inline-block">
+         
+          
+         <CiUser className="cursor-pointer" />
+         
+         <div className="absolute top-5 right-0 mt-2 hidden w-40 rounded-md bg-white shadow-lg group-hover:block z-50">
+           <ul className="py-1 text-lg text-gray-700">
+             <li>
+               <Link
+                 to="/login"
+                 className="block px-4 py-2 hover:bg-gray-100"
+                 onClick={() => setActive('')}
+               >
+                 Login
+               </Link>
+             </li>
+             <li>
+             <Link
+                 to="/register"
+                 className="block px-4 py-2 hover:bg-gray-100"
+                 onClick={() => setActive('')}
+               >
+                 Register
+               </Link>
+             </li>
+           </ul>
+         </div>
+       </div>)}
            
             <Link to='/cart' onClick={()=>setActive('')} className='relative'><CiShoppingCart  />
             {cartItems.length > 0 && (
