@@ -124,8 +124,9 @@ const CartPage = (props) => {
 							<span className="font-semibold">{cart.totalPrice}</span>
 						</div>
 						<button
+							disabled = {cartItems.length === 0}
 							onClick={checkoutHandler}
-							className="bg-green-900 font-bold text-white py-2 px-4 rounded-lg mt-4 w-full hover:cursor-pointer"
+							className={`bg-green-900 font-bold text-white py-2 px-4 rounded-lg mt-4 w-full  ${cartItems.length === 0 ? 'hover:cursor-not-allowed' : 'hover:cursor-pointer'}`}
 						>
 							Checkout
 						</button>

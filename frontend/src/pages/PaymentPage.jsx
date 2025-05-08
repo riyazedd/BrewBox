@@ -1,12 +1,76 @@
-import React from 'react'
-import Banner from '../components/Banner'
+import { useState, useEffect } from "react";
+import Banner from "../components/Banner";
+import CheckoutSteps from "../components/CheckoutSteps";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { savePaymentMethod } from "../slices/cartSlice";
 
 const PaymentPage = (props) => {
-  return (
-    <div>
-      <Banner title={props.title} />
-    </div>
-  )
-}
+	const cart = useSelector((state) => state.cart);
+	const { shippingAddress } = cart;
 
-export default PaymentPage
+	const [paymentMethod, setPaymentMethod] = useState("Khalti");
+
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
+
+	useEffect(() => {
+		if (!shippingAddress) {
+			navigate("/shipping");
+		}
+	}, [shippingAddress, navigate]);
+
+	const submitHandler = (e) => {
+		e.preventDefault();
+		dispatch(savePaymentMethod(paymentMethod));
+		navigate("/placeorder");
+	};
+	return (
+		<div>
+			<Banner title={props.title} />
+			<div className="flex flex-col items-center gap-5 mb-10">
+				<CheckoutSteps step1 step2 step3 />
+				<form onSubmit={submitHandler} className="w-1/3 flex flex-col gap-6">
+					<p className="text-xl font-semibold text-gray-600">
+						Select Payment Method
+					</p>
+
+					<div className="flex gap-2 text-xl">
+						<input
+							className="border rounded p-2 text-lg"
+							type="radio"
+							id="khalti"
+							name="paymentMethod"
+							value="Khalti"
+							checked={paymentMethod === "Khalti"}
+							onChange={(e) => setPaymentMethod(e.target.value)}
+						/>
+						<label htmlFor="khalti">Khalti</label>
+					</div>
+
+					<div className="flex gap-2 text-xl">
+						<input
+							className="border rounded p-2 text-lg"
+							type="radio"
+							id="cod"
+							name="paymentMethod"
+							value="cod"
+							checked={paymentMethod === "cod"}
+							onChange={(e) => setPaymentMethod(e.target.value)}
+						/>
+						<label htmlFor="cod">Cash on Delivery</label>
+					</div>
+
+					<button
+						type="submit"
+						className="py-3 px-7 bg-green-800 text-lg text-white font-semibold rounded hover:bg-green-700 hover:cursor-pointer"
+					>
+						Continue
+					</button>
+				</form>
+			</div>
+		</div>
+	);
+};
+
+export default PaymentPage;
