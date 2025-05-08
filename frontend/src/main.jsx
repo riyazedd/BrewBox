@@ -7,6 +7,7 @@ import './index.css'
 import App from './App.jsx'
 import PrivateRoute from './components/PrivateRoute.jsx'
 import HomePage from './pages/HomePage.jsx'
+import ShopPage from './pages/ShopPage.jsx'
 import ProductDetails from './pages/ProductDetails.jsx'
 import SubscriptionPage from './pages/SubscriptionPage.jsx'
 import AboutUsPage from './pages/AboutUsPage.jsx'
@@ -15,11 +16,13 @@ import CartPage from './pages/CartPage.jsx'
 import LoginPage from './pages/LoginPage.jsx'
 import RegisterPage from './pages/RegisterPage.jsx'
 import ShippingPage from './pages/ShippingPage.jsx'
+import PaymentPage from './pages/PaymentPage.jsx'
 
 const router=createBrowserRouter(
   createRoutesFromElements(
     <Route path='/' element={<App />}>
-      <Route index="true" path='/' element={<HomePage title="shop" />}/>
+      <Route index="true" path='/' element={<HomePage/>}/>
+      <Route path='/shop' element={<ShopPage title="shop" />}/>
       <Route path='/subscription' element={<SubscriptionPage title="subscription" />}/>
       <Route path='/about-us' element={<AboutUsPage title="about us" />}/>
       <Route path='/contact-us' element={<ContactUsPage title="contact us" />}/>
@@ -30,6 +33,7 @@ const router=createBrowserRouter(
 
       <Route path='' element={<PrivateRoute />}>
         <Route path='/shipping' element={<ShippingPage title="Shipping"/>} />
+        <Route path='/payment' element={<PaymentPage title="Payment"/>} />
       </Route>
       
     </Route>

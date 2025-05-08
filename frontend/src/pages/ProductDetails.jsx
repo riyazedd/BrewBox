@@ -54,7 +54,7 @@ const ProductDetails = () => {
 			) : (
 				<div className="flex justify-center">
 					{product ? (
-						<div className="my-10 mx-30 flex gap-10 w-[75%]">
+						<div className="my-10 mx-30 flex gap-10 w-[81%]">
 							<img
 								src={product.image}
 								alt="product"

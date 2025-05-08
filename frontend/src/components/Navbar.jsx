@@ -37,7 +37,8 @@ const Navbar = () => {
     <div className='w-full h-auto shadow-md flex items-center justify-between '>
         <Link to="/"><img src="/logo.png" alt="logo" className='w-30 ml-30' /></Link>
         <ul className='flex gap-10'>
-            <Link to='/' onClick={()=>setActive('home')}><li className={`${active==='home' ? 'underline underline-offset-4 font-bold text-green-900' : '' }`}>SHOP</li></Link>
+            <Link to='/' onClick={()=>setActive('home')}><li className={`${active==='home' ? 'underline underline-offset-4 font-bold text-green-900' : '' }`}>HOME</li></Link>
+            <Link to='/shop' onClick={()=>setActive('shop')}><li className={`${active==='shop' ? 'underline underline-offset-4 font-bold text-green-900' : '' }`}>SHOP</li></Link>
             <Link to='/subscription' onClick={()=>setActive('subscription')}><li className={`${active==='subscription' ? 'underline underline-offset-4 font-bold text-green-900' : '' }`}>SUBSCRIPTION</li></Link>
             <Link to='/about-us' onClick={()=>setActive('about')}><li className={`${active==='about' ? 'underline underline-offset-4 font-bold text-green-900' : '' }`}>ABOUT US</li></Link>
             <Link to='/contact-us' onClick={()=>setActive('contact')}><li className={`${active==='contact' ? 'underline underline-offset-4 font-bold text-green-900' : '' }`}>CONTACT US</li></Link>
