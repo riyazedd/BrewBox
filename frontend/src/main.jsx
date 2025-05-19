@@ -17,6 +17,7 @@ import LoginPage from './pages/LoginPage.jsx'
 import RegisterPage from './pages/RegisterPage.jsx'
 import ShippingPage from './pages/ShippingPage.jsx'
 import PaymentPage from './pages/PaymentPage.jsx'
+import ProfilePage from './pages/ProfilePage.jsx'
 
 const router=createBrowserRouter(
   createRoutesFromElements(
@@ -34,6 +35,7 @@ const router=createBrowserRouter(
       <Route path='' element={<PrivateRoute />}>
         <Route path='/shipping' element={<ShippingPage title="Shipping"/>} />
         <Route path='/payment' element={<PaymentPage title="Payment"/>} />
+        <Route path='/profile' element={<ProfilePage title="Profile"/>} />
       </Route>
       
     </Route>
