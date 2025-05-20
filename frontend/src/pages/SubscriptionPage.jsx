@@ -24,7 +24,7 @@ const SubscriptionPage = (props) => {
 				<div>{error.data?.message || error.error}</div>
 			) : (
 				<div className="flex justify-center">
-					<div className="grid grid-cols-3 m-10 gap-10 w-2/3">
+					<div className="grid grid-cols-4 m-10 gap-10">
 						{product.length > 0 ? (
 							product.map((p) => <ProductCard product={p} key={p._id} />)
 						) : (

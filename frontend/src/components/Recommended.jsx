@@ -11,7 +11,7 @@ const Recommended = () => {
       <div>
         {isLoading ? (<div>Loading...</div>) : error ? (<div>{error.data?.message || error.error}</div>) : (<>
 				<div className="flex justify-center">
-				<div className="grid grid-cols-3 m-10 gap-10 w-full">
+				<div className="grid grid-cols-4 m-10 gap-10 w-full">
 					{products.filter((p)=>p.category==='Coffee').map((p) => (
 						<ProductCard product={p} key={p._id} />
 					))}

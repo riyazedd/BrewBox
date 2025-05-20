@@ -6,6 +6,7 @@ import store from './store.js'
 import './index.css'
 import App from './App.jsx'
 import PrivateRoute from './components/PrivateRoute.jsx'
+import AdminRoute from './components/AdminRoute.jsx'
 import HomePage from './pages/HomePage.jsx'
 import ShopPage from './pages/ShopPage.jsx'
 import ProductDetails from './pages/ProductDetails.jsx'
@@ -18,6 +19,8 @@ import RegisterPage from './pages/RegisterPage.jsx'
 import ShippingPage from './pages/ShippingPage.jsx'
 import PaymentPage from './pages/PaymentPage.jsx'
 import ProfilePage from './pages/ProfilePage.jsx'
+import AdminProductList from './pages/admin/AdminProductList.jsx'
+import AdminUpdateProduct from './pages/admin/AdminUpdateProduct.jsx'
 
 const router=createBrowserRouter(
   createRoutesFromElements(
@@ -36,6 +39,12 @@ const router=createBrowserRouter(
         <Route path='/shipping' element={<ShippingPage title="Shipping"/>} />
         <Route path='/payment' element={<PaymentPage title="Payment"/>} />
         <Route path='/profile' element={<ProfilePage title="Profile"/>} />
+      </Route>
+
+      <Route path='' element={<AdminRoute />}>
+        <Route path='/admin/productlist' element={<AdminProductList/>} />
+        <Route path='/admin/productlist/:pageNumber' element={<AdminProductList/>} />
+        <Route path='/admin/product/:id/edit' element={<AdminUpdateProduct/>} />
       </Route>
       
     </Route>

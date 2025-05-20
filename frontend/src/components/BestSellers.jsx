@@ -29,7 +29,7 @@ const BestSellers = () => {
       ) : error ? (
         <div>{error.data?.message || error.error}</div>
       ) : (
-        <div className="relative w-[80%] px-6 mt-10">
+        <div className="relative px-6 mt-10">
           {/* Left Arrow */}
           <button
             onClick={() => scroll('left')}

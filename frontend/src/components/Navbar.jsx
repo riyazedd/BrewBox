@@ -53,6 +53,17 @@ const Navbar = () => {
           <div className="absolute top-5 right-0 mt-2 hidden w-40 rounded-md bg-white shadow-lg group-hover:block z-50">
             <ul className="py-1 text-lg text-gray-700">
             <p className="block px-4 py-2">Hello, {firstname}</p>
+              {userInfo.isAdmin ? <>
+                <li>
+                <Link
+                  to="/admin/productlist"
+                  className="block px-4 py-2 hover:bg-gray-100"
+                  onClick={() => setActive('')}
+                >
+                  Products
+                </Link>
+              </li>
+              </> : <></>}
               <li>
                 <Link
                   to="/profile"
