@@ -1,14 +1,15 @@
-import React from 'react'
 import Hero from '../components/Hero'
-import BestSellers from '../components/BestSellers'
+import TopRated from '../components/TopRated.jsx'
 import Recommended from '../components/Recommended'
+// import ProductCarousel from '../components/ProductCarousel'
 
 const HomePage = () => {
   return (
     <div className='h-full'>
       <Hero />
       <div className='mt-20'>
-        <BestSellers />
+        {/* <ProductCarousel /> */}
+        <TopRated />
       </div>
       <div className='mt-20'>
         <Recommended />

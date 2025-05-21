@@ -7,6 +7,7 @@ import Rating from "../components/Rating.jsx";
 import { useGetProductDetailsQuery } from "../slices/productApiSlice.js";
 import { addToCart } from "../slices/cartSlice.js";
 import { useDispatch } from "react-redux";
+import Meta from "../components/Meta.jsx";
 
 const ProductDetails = () => {
 	const [price, setPrice] = useState(0);
@@ -44,6 +45,15 @@ const ProductDetails = () => {
 		// navigate('/cart')
 	}
 
+	useEffect(() => {
+    if (product?.product_name) {
+      document.title = `${product.product_name} | BrewBox`;
+    }
+    return () => {
+      document.title = 'BrewBox'; // Reset when leaving page
+    };
+  }, [product]);
+
 
 	return (
 		<>
@@ -52,9 +62,11 @@ const ProductDetails = () => {
 			) : error ? (
 				<div>{error.data.message || error.error}</div>
 			) : (
+				<>
 				<div className="flex justify-center">
 					{product ? (
 						<div className="my-10 mx-30 flex gap-10 w-[81%]">
+				{/* <Meta title={product?.product_name} /> */}
 							<img
 								src={product.image}
 								alt="product"
@@ -132,6 +144,7 @@ const ProductDetails = () => {
 						</div>
 					)}
 				</div>
+				</>
 			)}
 		</>
 	);

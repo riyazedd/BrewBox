@@ -4,7 +4,7 @@ import { Outlet, useLocation } from 'react-router-dom'
 import {motion} from 'motion/react'
 import {ToastContainer} from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-// import Footer from './components/Footer'
+import Footer from './components/Footer'
 
 const App = () => {
   const location=useLocation();
@@ -17,7 +17,7 @@ const App = () => {
       </motion.div> 
     </div>
     <ToastContainer />
-    {/* <Footer /> */}
+    <Footer />
     </>
   )
 }
