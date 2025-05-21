@@ -1,12 +1,14 @@
 import {React,useState,useEffect} from 'react'
 import { Link,useNavigate } from 'react-router-dom'
-import {CiShoppingCart, CiUser} from 'react-icons/ci'
+import {CiShoppingCart, CiUser, CiSearch} from 'react-icons/ci'
 import { useLogoutMutation } from '../slices/usersApiSlice'
 import {logout} from '../slices/authSlice'
 import { useSelector, useDispatch } from 'react-redux'
+import SearchBox from './SearchBox.jsx'
 
 const Navbar = () => {
   const [active,setActive]= useState('home');
+  const [showSearch, setShowSearch] = useState(false); 
   const[firstname ,setFirstName]=useState();
   const {cartItems} = useSelector((state) => state.cart);
   const {userInfo} = useSelector((state) => state.auth);
@@ -34,6 +36,7 @@ const Navbar = () => {
   }
   
   return (
+    <>
     <div className='w-full h-auto shadow-md flex items-center justify-between '>
         <Link to="/"><img src="/logo.png" alt="logo" className='w-30 ml-30' /></Link>
         <ul className='flex gap-10'>
@@ -44,6 +47,13 @@ const Navbar = () => {
             <Link to='/contact-us' onClick={()=>setActive('contact')}><li className={`${active==='contact' ? 'underline underline-offset-4 font-bold text-green-900' : '' }`}>CONTACT US</li></Link>
         </ul>
         <div className='flex gap-6 text-3xl mr-30'>
+
+        {/* Search Icon */}
+          <CiSearch
+            className="cursor-pointer"
+            onClick={() => setShowSearch((prev) => !prev)}
+            title="Search"
+          />
 
         {userInfo ? (<div className="group relative inline-block">
          
@@ -122,6 +132,14 @@ const Navbar = () => {
             </Link>
         </div>
     </div>
+    {showSearch && (
+        <div className="w-full flex justify-center p-4 bg-gray-100 shadow-md">
+          <div className="max-w-2xl">
+            <SearchBox />
+          </div>
+        </div>
+      )}
+      </>
   )
 }
 

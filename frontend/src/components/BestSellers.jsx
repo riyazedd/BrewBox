@@ -4,7 +4,7 @@ import { useGetProductsQuery } from '../slices/productApiSlice';
 import { ChevronLeft, ChevronRight } from 'lucide-react'; // or use your own icons
 
 const BestSellers = () => {
-  const { data: products, isLoading, error } = useGetProductsQuery();
+  const { data, isLoading, error } = useGetProductsQuery(1);
   const scrollRef = useRef();
 
   const scroll = (direction) => {
@@ -17,7 +17,7 @@ const BestSellers = () => {
     }
   };
 
-  const coffeeProducts = products?.filter((p) => p.category === 'Coffee') || [];
+  const coffeeProducts = data?.products?.filter((p) => p.category === 'Coffee') || [];
 
   return (
     <div className="flex flex-col items-center w-full">
@@ -29,11 +29,11 @@ const BestSellers = () => {
       ) : error ? (
         <div>{error.data?.message || error.error}</div>
       ) : (
-        <div className="relative px-6 mt-10">
+        <div className="relative mt-10 mx-10">
           {/* Left Arrow */}
           <button
             onClick={() => scroll('left')}
-            className="absolute left-0 top-1/2 -translate-y-1/2 bg-white shadow-md p-2 rounded-full z-10"
+            className="absolute left-2 top-1/2 -translate-y-1/2 bg-white shadow-md p-2 rounded-full z-10"
           >
             <ChevronLeft size={24} />
           </button>

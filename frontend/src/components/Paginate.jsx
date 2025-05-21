@@ -1,27 +1,36 @@
-import { Pagination } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
-const Paginate = ({ pages, page, isAdmin = false, keyword = '' }) => {
+const Paginate = ({ pages, page,title, isAdmin = false, keyword = '' }) => {
   return (
     pages > 1 && (
-      <Pagination>
-        {[...Array(pages).keys()].map((x) => (
-          <Pagination.Item
-            as={Link}
-            key={x + 1}
-            to={
-              !isAdmin
-                ? keyword
-                  ? `/search/${keyword}/page/${x + 1}`
-                  : `/page/${x + 1}`
-                : `/admin/productlist/${x + 1}`
-            }
-            active={x + 1 === page}
-          >
-            {x + 1}
-          </Pagination.Item>
-        ))}
-      </Pagination>
+      <div className="flex justify-center my-6">
+        <nav className="inline-flex rounded-md shadow-sm" aria-label="Pagination">
+          {[...Array(pages).keys()].map((x) => {
+            const currentPage = x + 1;
+            const path = !isAdmin
+              ? keyword
+                ? `/search/${keyword}/page/${currentPage}`
+                : `/page/${currentPage}`
+              : `/admin/productlist/${currentPage}`;
+
+            const isActive = currentPage === page;
+
+            return (
+              <Link
+                key={currentPage}
+                to={path}
+                className={`px-4 py-2 border text-sm font-medium ${
+                  isActive
+                    ? 'bg-blue-600 text-white border-blue-600'
+                    : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100'
+                }`}
+              >
+                {currentPage}
+              </Link>
+            );
+          })}
+        </nav>
+      </div>
     )
   );
 };

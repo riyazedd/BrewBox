@@ -1,8 +1,9 @@
-// import {React,useState,useEffect} from "react";
 import Banner from "../components/Banner";
 import ProductCard from "../components/ProductCard";
-// import API from "../API";
+import { useParams } from 'react-router-dom';
 import { useGetProductsQuery } from "../slices/productApiSlice";
+import Paginate from '../components/Paginate.jsx';
+// import ProductCarousel from '../components/ProductCarousel';
 
 const ShopPage = (props) => {
 	// const [products,setProducts]=useState([]);
@@ -16,19 +17,29 @@ const ShopPage = (props) => {
 	// },[])
 
 	// console.log(products);
-
-	const {data:products,isLoading,error}=useGetProductsQuery();
+	const { pageNumber, keyword } = useParams();
+	
+	  const { data, isLoading, error } = useGetProductsQuery({
+		keyword,
+		pageNumber,
+	  });
+	
 	return (
 		<div>
 			<Banner title={props.title} />
-			{isLoading ? (<div><h1>Loading...</h1></div>) : error ? (<div>{error.data.message || error.error}</div>) : (<>
+			{isLoading ? (<div><h1>Loading...</h1></div>) : error ? (<div>{error?.data?.message || error.error}</div>) : (<>
 				<div className="flex justify-center">
 				<div className="grid grid-cols-4 m-10 gap-10 ">
-					{products.map((p) => (
+					{data.products.map((p) => (
 						<ProductCard product={p} key={p._id} />
 					))}
 				</div>
 			</div>
+			<Paginate
+            pages={data.pages}
+            page={data.page}
+            keyword={keyword ? keyword : ''}
+          />
 			</>)}
 		</div>
 	);

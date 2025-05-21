@@ -27,7 +27,11 @@ const router=createBrowserRouter(
     <Route path='/' element={<App />}>
       <Route index="true" path='/' element={<HomePage/>}/>
       <Route path='/shop' element={<ShopPage title="shop" />}/>
+      <Route path='/search/:keyword' element={<ShopPage title="shop" />}/>
+      <Route path='/page/:pageNumber' element={<ShopPage title="shop" />}/>
+      <Route path='/search/:keyword/page/:pageNumber' element={<ShopPage title="shop" />}/>
       <Route path='/subscription' element={<SubscriptionPage title="subscription" />}/>
+      <Route path='/subscription/page/:pageNumber' element={<SubscriptionPage title="subscription" />}/>
       <Route path='/about-us' element={<AboutUsPage title="about us" />}/>
       <Route path='/contact-us' element={<ContactUsPage title="contact us" />}/>
       <Route path='/cart' element={<CartPage title="Your Cart" />}/>

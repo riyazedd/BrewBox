@@ -1,3 +1,4 @@
+import path from 'path'
 import express from 'express'
 import dotenv from "dotenv"
 import cookieParser from 'cookie-parser'
@@ -5,6 +6,7 @@ dotenv.config()
 import connectDB from './config/db.js'
 import productRoutes from './routes/productRoute.js'
 import userRoutes from './routes/userRoutes.js'
+import uploadRoutes from './routes/uploadRoute.js'
 import cors from 'cors'
 
 const PORT = process.env.PORT || 3000
@@ -31,5 +33,9 @@ app.get('/',(req,res)=>{
 
 app.use('/api/products', productRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/upload', uploadRoutes);
+
+const __dirname = path.resolve();
+app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
 
 app.listen(PORT,()=>console.log("Server running on port: "+PORT))

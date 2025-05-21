@@ -1,6 +1,6 @@
 import { useState,useEffect } from 'react';
 import { Link,useNavigate,useParams } from 'react-router-dom';
-import { useUpdateProductMutation, useGetProductDetailsQuery } from '../../slices/productApiSlice';
+import { useUpdateProductMutation, useGetProductDetailsQuery, useUploadProductImageMutation } from '../../slices/productApiSlice';
 import { toast } from 'react-toastify';
 
 const AdminUpdateProduct = () => {
@@ -9,13 +9,15 @@ const AdminUpdateProduct = () => {
   const [name,setName]=useState('');
   const [minPrice,setMinPrice]=useState(0);
   const [maxPrice,setMaxPrice]=useState(0);
-  const [image,setImage]=useState('');
+  const [image,setImage]=useState();
   const [category,setCategory]=useState('');
   const [countInStock,setCountInStock]=useState(0);
   const [description,setDecription]=useState('');
 
   const {data:product, isLoading,refetch,error} = useGetProductDetailsQuery(productId);
   const [updateProduct, {isLoading:loadingUpdate}] = useUpdateProductMutation();
+
+  const [uploadProductImage, {isLoading:loadingUpload}] = useUploadProductImageMutation();
   
   const navigate = useNavigate();
 
@@ -51,11 +53,25 @@ const AdminUpdateProduct = () => {
     }
   }
 
+  const uploadFileHandler = async (e) => {
+    // console.log(e.target.files[0]);
+    const formData = new FormData();
+    formData.append('image', e.target.files[0]);
+    try {
+      const res = await uploadProductImage(formData).unwrap();
+      setImage(res.image);
+      toast.success(res.message);
+    } catch (err) {
+      toast.error(err?.data?.message || err.error);
+    }
+  }
+  
  
   return (
     <div className="mx-20 my-10">
       <Link to='/admin/productlist' className='bg-green-700 text-white px-2 py-1 rounded'>Go Back</Link>
       <h2 className="text-2xl font-bold mt-4 text-gray-700">Update Product Detail</h2>
+
       {loadingUpdate && <>Loading...</>}
       {isLoading ? <>Loading...</> : error ? <div className='text-red-500'>{error?.data?.message || error.error}</div> :
       <div className='flex items-center justify-between'>
@@ -72,10 +88,11 @@ const AdminUpdateProduct = () => {
             <label htmlFor="maxPrice" className='text-lg font-semibold'>Max Price</label>
             <input type="number" id='maxPrice' value={maxPrice} onChange={(e)=>setMaxPrice(e.target.value)} className='border-2 border-gray-300 rounded px-2 py-1 w-full' />
           </div>
-          {/* <div>
+          <div>
             <label htmlFor="image" className='text-lg font-semibold'>Image</label>
-            <input type="file" id='image' onChange={(e)=>setImage(e.target.value)} className='border-2 border-gray-300 rounded px-2 py-1 w-full' />
-          </div> */}
+            <input type="text" placeholder='Enter Image' value={image}  onChange={(e)=>setImage(e.target.value)} />
+            <input type="file" id='image' onChange={uploadFileHandler}  className='border-2 border-gray-300 rounded px-2 py-1 w-full' />
+          </div>
           <div>
             <label htmlFor="category" className='text-lg font-semibold'>Category</label>
             <input type="text" id='category' value={category} onChange={(e)=>setCategory(e.target.value)} className='border-2 border-gray-300 rounded px-2 py-1 w-full' /> 
@@ -93,12 +110,12 @@ const AdminUpdateProduct = () => {
           </button>
         </form>
         <div>
-          {/* <img src={image} alt="product" /> */}
+          <img src={image} alt="product" />
         </div>
       </div>
       }
     </div>
   );
-};
 
+}
 export default AdminUpdateProduct;
