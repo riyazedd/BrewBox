@@ -24,15 +24,15 @@ function checkFileType(file, cb) {
   }
 }
 
-const upload = multer({
-    storage,
-})
+const upload = multer({ storage });
 
-router.post('/', upload.single('image'),(req,res)=>{
+router.post('/', upload.array('images', 5), (req, res) => {
+    // 'images' is the field name, 5 is the max number of files
+    const imagePaths = req.files.map(file => `/${file.path.replace(/\\/g, '/')}`);
     res.send({
-        message:'Image uploaded successfully',
-        image:`/${req.file.path}`,
-    })
-} )
+        message: 'Images uploaded successfully',
+        images: imagePaths,
+    });
+});
 
 export default router;

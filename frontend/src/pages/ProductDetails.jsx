@@ -3,7 +3,6 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import BreadCrumb from "../components/BreadCrumb.jsx";
 import QuantitySelector from "../components/QuantitySelector.jsx";
 import Rating from "../components/Rating.jsx";
-// import API from "../API.jsx";
 import {
 	useGetProductDetailsQuery,
 	useCreateReviewMutation,
@@ -11,7 +10,8 @@ import {
 import { addToCart } from "../slices/cartSlice.js";
 import { useDispatch, useSelector } from "react-redux";
 import StarRatingInput from "../components/StarRatingInput.jsx";
-import {toast} from 'react-toastify'
+import { toast } from "react-toastify";
+import TopRated from "../components/TopRated.jsx";
 
 const ProductDetails = () => {
 	const [price, setPrice] = useState(0);
@@ -19,19 +19,11 @@ const ProductDetails = () => {
 	const [quantity, setQuantity] = useState(1);
 	const [rating, setRating] = useState(0);
 	const [review, setReview] = useState("");
-	const { id: productId } = useParams();
+	const [selectedImage, setSelectedImage] = useState();
 
+	const { id: productId } = useParams();
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-
-	// useEffect(() => {
-	// 	const fetchProduct = async()=>{
-	// 		const {data}=await API.get(`/api/products/${productId}`);
-	// 		setProduct(data)
-	// 	}
-
-	// 	fetchProduct();
-	// }, [productId]);
 
 	const {
 		data: product,
@@ -48,39 +40,39 @@ const ProductDetails = () => {
 	useEffect(() => {
 		if (product) {
 			setPrice(size === "250" ? product.min_price : product.max_price);
+			setSelectedImage(product.image[0]); // Default main image
+			// console.log(product.image[0]);
 		}
 	}, [size, product]);
-
-	const addToCartHandler = () => {
-		dispatch(addToCart({ ...product, quantity, price }));
-		// navigate('/cart')
-	};
 
 	useEffect(() => {
 		if (product?.product_name) {
 			document.title = `${product.product_name} | BrewBox`;
 		}
 		return () => {
-			document.title = "BrewBox"; // Reset when leaving page
+			document.title = "BrewBox";
 		};
 	}, [product]);
 
+	const addToCartHandler = () => {
+		dispatch(addToCart({ ...product, quantity, price }));
+	};
+
 	const submitHandler = async (e) => {
 		e.preventDefault();
-		try{
+		try {
 			await createReview({
-			productId,
-			rating,
-			comment: review,
+				productId,
+				rating,
+				comment: review,
 			}).unwrap();
 			refetch();
 			toast.success("Review submitted successfully");
 			setRating(0);
 			setReview("");
-		}catch (error) {
+		} catch (error) {
 			toast.error(error?.data?.message || error.error);
 		}
-		
 	};
 
 	return (
@@ -95,13 +87,44 @@ const ProductDetails = () => {
 						{product ? (
 							<>
 								<div className="my-10 mx-30 flex gap-10 w-[81%]">
-									{/* <Meta title={product?.product_name} /> */}
-									<img
-										src={product.image}
-										alt="product"
-										className="w-[50%] border border-gray-100 rounded"
-									/>
-									<div>
+									{/* === Main Image + Gallery === */}
+									<div className="w-[50%]">
+										{selectedImage && (
+											<img
+												src={`${
+													import.meta.env.VITE_BACKEND_URL ||
+													"http://localhost:3000"
+												}${selectedImage}`}
+												alt="product"
+												className="w-[100%] h-[600px] object-cover border border-gray-100 rounded mb-4"
+											/>
+										)}
+
+										{/* Image Thumbnails */}
+										{product.image && product.image.length > 0 && (
+											<div className="flex gap-3 flex-wrap">
+												{product.image.map((img, idx) => (
+													<img
+														key={idx}
+														src={`${
+															import.meta.env.VITE_BACKEND_URL ||
+															"http://localhost:3000"
+														}${img}`}
+														alt={`thumb-${idx}`}
+														className={`w-20 h-20 object-cover border rounded cursor-pointer ${
+															selectedImage === img
+																? "ring-2 ring-green-600"
+																: ""
+														}`}
+														onClick={() => setSelectedImage(img)}
+													/>
+												))}
+											</div>
+										)}
+									</div>
+
+									{/* === Product Info === */}
+									<div className="w-[50%] flex flex-col ">
 										<BreadCrumb product={product} />
 										<h1 className="text-3xl font-semibold mt-8 font-[Helvetica] text-gray-800">
 											{product.product_name}
@@ -129,7 +152,7 @@ const ProductDetails = () => {
 													<option value="500">500gm</option>
 												</select>
 											</div>
-											{product.category === "Subscription" ? (
+											{product.category === "Subscription" && (
 												<div className="flex items-center gap-7 mt-5">
 													<p className="text-xl font-semibold">Roast: </p>
 													<select className="w-52 p-2 border border-gray-500 rounded text-lg text-gray-600">
@@ -137,8 +160,6 @@ const ProductDetails = () => {
 														<option value="medium-dark">Medium-Dark</option>
 													</select>
 												</div>
-											) : (
-												<div></div>
 											)}
 											<div className="flex items-center gap-7 mt-5">
 												<p className="text-xl font-semibold">Grind: </p>
@@ -172,7 +193,9 @@ const ProductDetails = () => {
 										</div>
 									</div>
 								</div>
-								<div className="flex flex-col justify-center  md:flex-row w-full">
+
+								{/* === Reviews Section === */}
+								<div className="flex flex-col justify-center md:flex-row w-full">
 									<div className="w-full md:w-1/2 p-4">
 										<h2 className="text-2xl font-semibold mb-4">Reviews</h2>
 										{product.reviews.length === 0 && (
@@ -188,9 +211,9 @@ const ProductDetails = () => {
 												>
 													<div className="flex items-center mb-2 justify-between">
 														<strong className="block">{review.name}</strong>
-													<p className="text-sm text-gray-500">
-														{review.createdAt.substring(0, 10)}
-													</p>
+														<p className="text-sm text-gray-500">
+															{review.createdAt.substring(0, 10)}
+														</p>
 													</div>
 													<Rating value={review.rating} />
 													<p>{review.comment}</p>
@@ -200,9 +223,7 @@ const ProductDetails = () => {
 												<h2 className="text-xl font-semibold mb-4">
 													Write a Customer Review
 												</h2>
-
-												{loadingReview && <>Loading... </>}
-
+												{loadingReview && <>Loading...</>}
 												{userInfo ? (
 													<form onSubmit={submitHandler} className="space-y-4">
 														<div>
@@ -256,6 +277,11 @@ const ProductDetails = () => {
 											</div>
 										</div>
 									</div>
+								</div>
+
+								{/* === Top Rated Products Section === */}
+								<div className="mt-20 border-t border-gray-300 pt-10">
+									<TopRated />
 								</div>
 							</>
 						) : (

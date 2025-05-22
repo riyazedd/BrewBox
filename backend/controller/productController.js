@@ -1,5 +1,7 @@
 import asyncHandler from '../middleware/asyncHandler.js';
 import Product from '../models/productModel.js';
+import fs from 'fs';
+import path from 'path';
 // import dotenv from 'dotenv';
 // dotenv.config();
 
@@ -7,7 +9,7 @@ import Product from '../models/productModel.js';
 // @route   GET /api/products
 // @access  Public
 const getProducts = asyncHandler(async (req, res) => {
-  const pageSize = 4;
+  const pageSize = 8;
   const page = Number(req.query.pageNumber) || 1;
   
   
@@ -47,28 +49,43 @@ const getProductById = asyncHandler(async (req, res) => {
 // @route   POST /api/products
 // @access  Private/Admin
 const createProduct = asyncHandler(async (req, res) => {
+  const {
+    product_name,
+    min_price,
+    max_price,
+    image,
+    category,
+    countInStock,
+    description,
+  } = req.body;
+
+  if (!Array.isArray(image) || image.length === 0) {
+    res.status(400);
+    throw new Error("At least one image is required");
+  }
+
   const product = new Product({
-    product_name: 'Sample name',
-    min_price: 0,
-    max_price: 0,
-    user: req.user._id,
-    image: '/images/sample.jpg',
-    brand: 'Sample brand',
-    category: 'Sample category',
-    countInStock: 0,
+    product_name,
+    min_price,
+    max_price,
+    image, 
+    category,
+    countInStock,
+    description,
     numReviews: 0,
-    description: 'Sample description',
   });
 
   const createdProduct = await product.save();
   res.status(201).json(createdProduct);
 });
 
+
+
 // @desc    Update a product
 // @route   PUT /api/products/:id
 // @access  Private/Admin
 const updateProduct = asyncHandler(async (req, res) => {
-  const { product_name, min_price,max_price, description, image, brand, category, countInStock } =
+  const { product_name, min_price, max_price, description, image, category, countInStock } =
     req.body;
 
   const product = await Product.findById(req.params.id);
@@ -78,8 +95,14 @@ const updateProduct = asyncHandler(async (req, res) => {
     product.min_price = min_price;
     product.max_price = max_price;
     product.description = description;
+
+    // Ensure image is always an array and not empty
+    if (!Array.isArray(image) || image.length === 0) {
+      res.status(400);
+      throw new Error("At least one image is required");
+    }
     product.image = image;
-    product.brand = brand;
+
     product.category = category;
     product.countInStock = countInStock;
 
@@ -97,6 +120,21 @@ const deleteProduct = asyncHandler(async (req, res) => {
   const product = await Product.findById(req.params.id);
 
   if (product) {
+    // Delete images from uploads folder
+    if (product.image && Array.isArray(product.image)) {
+      product.image.forEach(imgPath => {
+        // Remove leading slash if present
+        const relativePath = imgPath.startsWith('/') ? imgPath.slice(1) : imgPath;
+        const filePath = path.join(process.cwd(), relativePath);
+        fs.unlink(filePath, err => {
+          // Log error but don't throw, so product deletion continues
+          if (err && err.code !== 'ENOENT') {
+            console.error(`Failed to delete image: ${filePath}`, err);
+          }
+        });
+      });
+    }
+
     await Product.deleteOne({ _id: product._id });
     res.json({ message: 'Product removed' });
   } else {

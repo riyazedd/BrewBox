@@ -13,8 +13,8 @@ const AdminProductList = () => {
 		pageNumber,
 	  });
 	// console.log(products);
-	const [createProduct, { isLoading: loadingCreate }] =
-		useCreateProductMutation();
+	// const [createProduct, { isLoading: loadingCreate }] =
+	// 	useCreateProductMutation();
 	
 
    const [deleteProduct, { isLoading: loadingDelete }] =
@@ -33,17 +33,17 @@ const AdminProductList = () => {
 	};
   
 
-  const createProductHandler = async () => {
-	  if (window.confirm('Are you sure you want to create a new product?')) {
-		try {
-		  await createProduct();
-		  toast.success("Product Added Successfully!")
-		  refetch();
-		} catch (err) {
-		  toast.error(err?.data?.message || err.error);
-		}
-	  }
-	};
+//   const createProductHandler = async () => {
+// 	  if (window.confirm('Are you sure you want to create a new product?')) {
+// 		try {
+// 		  await createProduct();
+// 		  toast.success("Product Added Successfully!")
+// 		  refetch();
+// 		} catch (err) {
+// 		  toast.error(err?.data?.message || err.error);
+// 		}
+// 	  }
+// 	};
 
 	return (
 		<div className="mx-20 my-10">
@@ -53,13 +53,14 @@ const AdminProductList = () => {
 					<p>Products List</p>
 				</div>
 				<div>
-						<button onClick={createProductHandler} className="flex items-center text-xl gap-2 bg-green-600 px-3 py-2 rounded text-white">
+						<Link to="/admin/product/create">
+							<button className="flex items-center text-xl gap-2 bg-green-600 px-3 py-2 rounded text-white">
 						<FaEdit />
 						Add Product
 						</button>
+						</Link>
 				</div>
 			</div>
-			{loadingCreate && <>Loading...</>}
       {loadingDelete && <>Loading...</>}
 			{isLoading ? (
 				<>Loading...</>

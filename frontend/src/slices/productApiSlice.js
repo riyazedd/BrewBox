@@ -18,9 +18,10 @@ export const productsApiSlice = apiSlice.injectEndpoints({
       keepUnusedDataFor: 5,
     }),
     createProduct: builder.mutation({
-      query: () => ({
+      query: (data) => ({
         url: `${PRODUCTS_URL}`,
         method: 'POST',
+        body: data,
       }),
       invalidatesTags: ['Product'],
     }),
@@ -33,10 +34,10 @@ export const productsApiSlice = apiSlice.injectEndpoints({
       invalidatesTags: ['Products'],
     }),
     uploadProductImage: builder.mutation({
-      query: (data) => ({
+      query: (formData) => ({
         url: `/api/upload`,
         method: 'POST',
-        body: data,
+        body: formData,
       }),
     }),
     deleteProduct: builder.mutation({

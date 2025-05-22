@@ -6,7 +6,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react'; // or use your own ico
 
 const TopRated = () => {
   const { data:products, isLoading, error } =useGetTopProductsQuery();
-  console.log(products);
+  // console.log(products);
   const scrollRef = useRef();
 
   const scroll = (direction) => {

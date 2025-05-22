@@ -22,6 +22,7 @@ import PaymentPage from './pages/PaymentPage.jsx'
 import ProfilePage from './pages/ProfilePage.jsx'
 import AdminProductList from './pages/admin/AdminProductList.jsx'
 import AdminUpdateProduct from './pages/admin/AdminUpdateProduct.jsx'
+import AdminAddProduct from './pages/admin/AdminAddProduct.jsx'
 
 const router=createBrowserRouter(
   createRoutesFromElements(
@@ -49,6 +50,7 @@ const router=createBrowserRouter(
       <Route path='' element={<AdminRoute />}>
         <Route path='/admin/productlist' element={<AdminProductList/>} />
         <Route path='/admin/productlist/:pageNumber' element={<AdminProductList/>} />
+        <Route path='/admin/product/create' element={<AdminAddProduct/>} />
         <Route path='/admin/product/:id/edit' element={<AdminUpdateProduct/>} />
       </Route>
       
