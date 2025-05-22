@@ -60,8 +60,8 @@ const createProduct = asyncHandler(async (req, res) => {
   } = req.body;
 
   if (!Array.isArray(image) || image.length === 0) {
-    res.status(400);
-    throw new Error("At least one image is required");
+    res.status(400).json({ message: 'At least one image is required' });
+    return;
   }
 
   const product = new Product({
@@ -98,8 +98,8 @@ const updateProduct = asyncHandler(async (req, res) => {
 
     // Ensure image is always an array and not empty
     if (!Array.isArray(image) || image.length === 0) {
-      res.status(400);
-      throw new Error("At least one image is required");
+      res.status(400).json({ message: 'At least one image is required' });
+      return;
     }
     product.image = image;
 

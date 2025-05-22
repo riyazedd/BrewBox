@@ -66,6 +66,10 @@ const AdminUpdateProduct = () => {
     }
   }
 
+  const removeImageHandler = (idx) => {
+    setImages((prev) => prev.filter((_, index) => index !== idx));
+  };
+
   return (
     <div className="mx-20 my-10">
       <Link to='/admin/productlist' className='bg-green-700 text-white px-2 py-1 rounded'>Go Back</Link>
@@ -98,16 +102,25 @@ const AdminUpdateProduct = () => {
               />
               <div className="flex flex-wrap gap-2 mt-2">
                 {images && images.map((img, idx) => (
-                  <img
-                    key={idx}
-                    src={
-                      img.startsWith("http")
-                        ? img
-                        : `${import.meta.env.VITE_BACKEND_URL || "http://localhost:3000"}${img}`
-                    }
-                    alt={`product-${idx}`}
-                    className="w-20 h-20 object-cover border-2 border-gray-300 rounded"
-                  />
+                  <div key={idx} className="relative">
+                    <img
+                      src={
+                        img.startsWith("http")
+                          ? img
+                          : `${import.meta.env.VITE_BACKEND_URL || "http://localhost:3000"}${img}`
+                      }
+                      alt={`product-${idx}`}
+                      className="w-20 h-20 object-cover border-2 border-gray-300 rounded"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => removeImageHandler(idx)}
+                      className="absolute top-0 right-0 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs"
+                      title="Remove image"
+                    >
+                      X
+                    </button>
+                  </div>
                 ))}
               </div>
             </div>

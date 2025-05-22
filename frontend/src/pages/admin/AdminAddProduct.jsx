@@ -55,20 +55,21 @@ const AdminAddProduct = () => {
 	};
 
 	const uploadFileHandler = async (e) => {
-	const files = Array.from(e.target.files);
-	const formData = new FormData();
-	files.forEach((file) => formData.append("images", file));
+		const files = Array.from(e.target.files);
+		const formData = new FormData();
+		files.forEach((file) => formData.append("images", file));
 
-	try {
-		const res = await uploadProductImage(formData).unwrap();
-		setImages((prevImages) => [...prevImages, ...res.images]); // ✅ append instead of replace
-		toast.success(res.message);
-	} catch (err) {
-		toast.error(err?.data?.message || err.error);
-	}
-};
-
-
+		try {
+			const res = await uploadProductImage(formData).unwrap();
+			setImages((prevImages) => [...prevImages, ...res.images]); // append instead of replace
+			toast.success(res.message);
+		} catch (err) {
+			toast.error(err?.data?.message || err.error);
+		}
+	};
+	const removeImageHandler = (idx) => {
+		setImages((prev) => prev.filter((_, index) => index !== idx));
+	};
 
 	return (
 		<div className="mx-20 my-10">
@@ -78,9 +79,7 @@ const AdminAddProduct = () => {
 			>
 				Go Back
 			</Link>
-			<h2 className="text-2xl font-bold mt-4 text-gray-700">
-				Add Product
-			</h2>
+			<h2 className="text-2xl font-bold mt-4 text-gray-700">Add Product</h2>
 
 			{loadingCreate && <>Loading...</>}
 			{loadingUpload ? (
@@ -142,6 +141,33 @@ const AdminAddProduct = () => {
 								onChange={uploadFileHandler}
 								className="border-2 border-gray-300 rounded px-2 py-1 w-full"
 							/>
+							<div className="flex flex-wrap gap-2 mt-2">
+								{images &&
+									images.map((img, idx) => (
+										<div key={idx} className="relative">
+											<img
+												src={
+													img.startsWith("http")
+														? img
+														: `${
+																import.meta.env.VITE_BACKEND_URL ||
+																"http://localhost:3000"
+														  }${img}`
+												}
+												alt={`product-${idx}`}
+												className="w-20 h-20 object-cover border-2 border-gray-300 rounded"
+											/>
+											<button
+												type="button"
+												onClick={() => removeImageHandler(idx)}
+												className="absolute top-0 right-0 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs"
+												title="Remove image"
+											>
+												X
+											</button>
+										</div>
+									))}
+							</div>
 						</div>
 						<div>
 							<label htmlFor="category" className="text-lg font-semibold">
@@ -182,24 +208,6 @@ const AdminAddProduct = () => {
 							Add
 						</button>
 					</form>
-					<div className="mt-16 flex flex-wrap gap-2">
-						{images &&
-							images.map((img, idx) => (
-								<img
-									key={idx}
-									src={
-										img.startsWith("http")
-											? img
-											: `${
-													import.meta.env.VITE_BACKEND_URL ||
-													"http://localhost:3000"
-											  }${img}`
-									}
-									alt={`product-${idx}`}
-									className="w-32 h-32 object-cover border-2 border-gray-300 rounded"
-								/>
-							))}
-					</div>
 				</div>
 			)}
 		</div>
