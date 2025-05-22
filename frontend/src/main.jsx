@@ -23,6 +23,9 @@ import ProfilePage from './pages/ProfilePage.jsx'
 import AdminProductList from './pages/admin/AdminProductList.jsx'
 import AdminUpdateProduct from './pages/admin/AdminUpdateProduct.jsx'
 import AdminAddProduct from './pages/admin/AdminAddProduct.jsx'
+import PlaceOrderScreen from './pages/PlaceOrderScreen.jsx'
+import EsewaSuccessPage from './pages/EsewaSuccessPage.jsx'
+import OrderPage from './pages/OrderPage.jsx'
 
 const router=createBrowserRouter(
   createRoutesFromElements(
@@ -44,6 +47,9 @@ const router=createBrowserRouter(
       <Route path='' element={<PrivateRoute />}>
         <Route path='/shipping' element={<ShippingPage title="Shipping"/>} />
         <Route path='/payment' element={<PaymentPage title="Payment"/>} />
+        <Route path='/placeorder' element={<PlaceOrderScreen title="Place Order"/>} />
+        <Route path='/payment_success' element={<EsewaSuccessPage title="Place Order"/>} />
+        <Route path='/order/:id' element={<OrderPage />} />
         <Route path='/profile' element={<ProfilePage title="Profile"/>} />
       </Route>
 

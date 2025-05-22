@@ -1,9 +1,12 @@
 import {useState,useEffect} from 'react'
+import { Link } from 'react-router-dom'
 import { useDispatch,useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 import { useProfileMutation } from '../slices/usersApiSlice'
+import { useGetMyOrdersQuery } from '../slices/ordersApiSlice';
 import { setCredentials } from '../slices/authSlice'
 import Banner from '../components/Banner'
+import { FaTimes } from 'react-icons/fa'
 
 const ProfilePage = (props) => {
     const [name,setName]=useState("");
@@ -14,6 +17,8 @@ const ProfilePage = (props) => {
     const dispatch = useDispatch();
 
     const {userInfo} = useSelector((state)=>state.auth);
+  const { data: orders, isLoading, error } = useGetMyOrdersQuery();
+
 
     const [updateProfile , {isLoading:loadingUpdateProfile}] = useProfileMutation();
 
@@ -41,8 +46,9 @@ const ProfilePage = (props) => {
   return (
     <div>
       <Banner title={props.title} />
-       <div className='flex flex-col items-center gap-5 mb-10'>
-        <form onSubmit={submitHandler} className='w-1/3 mt-10 flex flex-col gap-6'>
+       <div className='flex '>
+        <div className='flex flex-col items-center gap-5 mb-10 w-1/2'>
+        <form onSubmit={submitHandler} className='mt-10 flex flex-col gap-6 w-2/3'>
             <div className='flex flex-col gap-2'>
             <label className='text-xl font-semibold text-gray-600'  htmlFor="name">Username</label>
             <input className='border rounded p-2 text-lg' type="text" placeholder='John Doe' value={name} onChange={(e)=>setName(e.target.value)} />
@@ -63,6 +69,56 @@ const ProfilePage = (props) => {
             {loadingUpdateProfile && <>Loding...</> }
         </form>
       </div>
+      <div className="md:col-span-9 mt-10">
+      <h2 className="text-2xl font-bold mb-4 text-gray-700">My Orders</h2>
+      {isLoading ? (
+       <>Loading... </>
+      ) : error ? (
+        <>
+          {error?.data?.message || error.error}
+        </>
+      ) : (
+        <div className="overflow-x-auto">
+          <table className="min-w-full divide-y divide-gray-200 text-sm text-left">
+            <thead className="bg-gray-100">
+              <tr>
+                <th className="px-4 py-2 font-semibold">ID</th>
+                <th className="px-4 py-2 font-semibold">DATE</th>
+                <th className="px-4 py-2 font-semibold">TOTAL</th>
+                <th className="px-4 py-2 font-semibold">DELIVERED</th>
+                <th className="px-4 py-2 font-semibold"></th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-200">
+              {orders.map((order) => (
+                <tr key={order._id} className="hover:bg-gray-50">
+                  <td className="px-4 py-2">{order._id}</td>
+                  <td className="px-4 py-2">{order.createdAt.substring(0, 10)}</td>
+                  <td className="px-4 py-2">Rs.{order.totalPrice.toFixed(2)}</td>
+                  
+                  <td className="px-4 py-2">
+                    {order.isDelivered ? (
+                      order.deliveredAt.substring(0, 10)
+                    ) : (
+                      <FaTimes className="text-red-600" />
+                    )}
+                  </td>
+                  <td className="px-4 py-2">
+                    <Link
+                      to={`/order/${order._id}`}
+                      className="inline-block px-3 py-1 text-sm border border-gray-300 rounded hover:bg-gray-100"
+                    >
+                      Details
+                    </Link>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </div>
+       </div>
     </div>
   )
 }

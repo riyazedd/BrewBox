@@ -9,7 +9,7 @@ const PaymentPage = (props) => {
 	const cart = useSelector((state) => state.cart);
 	const { shippingAddress } = cart;
 
-	const [paymentMethod, setPaymentMethod] = useState("Khalti");
+	const [paymentMethod, setPaymentMethod] = useState("Esewa");
 
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
@@ -39,13 +39,13 @@ const PaymentPage = (props) => {
 						<input
 							className="border rounded p-2 text-lg"
 							type="radio"
-							id="khalti"
+							id="esewa"
 							name="paymentMethod"
-							value="Khalti"
-							checked={paymentMethod === "Khalti"}
+							value="Esewa"
+							checked={paymentMethod === "Esewa"}
 							onChange={(e) => setPaymentMethod(e.target.value)}
 						/>
-						<label htmlFor="khalti">Khalti</label>
+						<label htmlFor="esewa">Esewa</label>
 					</div>
 
 					<div className="flex gap-2 text-xl">

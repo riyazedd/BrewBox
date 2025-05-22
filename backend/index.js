@@ -6,6 +6,7 @@ dotenv.config()
 import connectDB from './config/db.js'
 import productRoutes from './routes/productRoute.js'
 import userRoutes from './routes/userRoutes.js'
+import orderRoutes from './routes/orderRoutes.js'
 import uploadRoutes from './routes/uploadRoute.js'
 import cors from 'cors'
 
@@ -34,6 +35,7 @@ app.get('/',(req,res)=>{
 app.use('/api/products', productRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/upload', uploadRoutes);
+app.use('/api/orders', orderRoutes);
 
 const __dirname = path.resolve();
 app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
