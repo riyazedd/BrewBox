@@ -66,11 +66,29 @@ const Navbar = () => {
               {userInfo.isAdmin ? <>
                 <li>
                 <Link
+                  to="/admin/orderlist"
+                  className="block px-4 py-2 hover:bg-gray-100"
+                  onClick={() => setActive('')}
+                >
+                  Orders
+                </Link>
+              </li>
+                <li>
+                <Link
                   to="/admin/productlist"
                   className="block px-4 py-2 hover:bg-gray-100"
                   onClick={() => setActive('')}
                 >
                   Products
+                </Link>
+              </li>
+                <li>
+                <Link
+                  to="/admin/userlist"
+                  className="block px-4 py-2 hover:bg-gray-100"
+                  onClick={() => setActive('')}
+                >
+                  Users
                 </Link>
               </li>
               </> : <></>}

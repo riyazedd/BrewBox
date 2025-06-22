@@ -21,6 +21,7 @@ const OrderPage = () => {
 
   const [deliverOrder, { isLoading: loadingDeliver }] = useDeliverOrderMutation();
   const { userInfo } = useSelector((state) => state.auth);
+  // console.log(userInfo)
 
   const deliverHandler = async () => {
     await deliverOrder(orderId);
@@ -55,17 +56,17 @@ const OrderPage = () => {
               {order.shippingAddress.address}, {order.shippingAddress.city}
             </p>
             {order.isDelivered ? (
-              <>Delivered on {order.deliveredAt}</>
+              <div className= 'mt-5 p-5 rounded bg-green-200 text-green-900'>Delivered on {order.deliveredAt}</div>
             ) : (
-              <>Not Delivered</>
+              <div className= 'mt-5 p-5 rounded bg-red-200 text-red-900'>Not Delivered</div>
             )}
           </div>
 
           {/* Payment Method */}
           <div className="p-4 border rounded-lg shadow-sm bg-white">
             <h2 className="text-xl font-semibold mb-2">Payment Method</h2>
-            <p>
-              <span className="font-medium">Method:</span> {order.paymentMethod}
+            <p className='flex gap-2'>
+              <span className="font-medium ">Method:</span><p className='uppercase'>{order.paymentMethod}</p>
             </p>
             
           </div>
@@ -125,7 +126,6 @@ const OrderPage = () => {
           {loadingDeliver && <>Loading...</>}
           {userInfo &&
             userInfo.isAdmin &&
-            order.isPaid &&
             !order.isDelivered && (
               <button
                 onClick={deliverHandler}

@@ -26,6 +26,9 @@ import AdminAddProduct from './pages/admin/AdminAddProduct.jsx'
 import PlaceOrderScreen from './pages/PlaceOrderScreen.jsx'
 import EsewaSuccessPage from './pages/EsewaSuccessPage.jsx'
 import OrderPage from './pages/OrderPage.jsx'
+import AdminOrderList from './pages/admin/AdminOrderList.jsx'
+import AdminUserList from './pages/admin/AdminUserList.jsx'
+import AdminUpdateUser from './pages/admin/AdminUpdateUser.jsx'
 
 const router=createBrowserRouter(
   createRoutesFromElements(
@@ -55,6 +58,9 @@ const router=createBrowserRouter(
 
       <Route path='' element={<AdminRoute />}>
         <Route path='/admin/productlist' element={<AdminProductList/>} />
+        <Route path='/admin/orderlist' element={<AdminOrderList/>} />
+        <Route path='/admin/userlist' element={<AdminUserList/>} />
+        <Route path='/admin/user/:id/edit' element={<AdminUpdateUser/>} />
         <Route path='/admin/productlist/:pageNumber' element={<AdminProductList/>} />
         <Route path='/admin/product/create' element={<AdminAddProduct/>} />
         <Route path='/admin/product/:id/edit' element={<AdminUpdateProduct/>} />
