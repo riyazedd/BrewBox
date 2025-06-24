@@ -75,6 +75,15 @@ const Navbar = () => {
               </li>
                 <li>
                 <Link
+                  to="/admin/subscriptionlist"
+                  className="block px-4 py-2 hover:bg-gray-100"
+                  onClick={() => setActive('')}
+                >
+                  Subscription
+                </Link>
+              </li>
+                <li>
+                <Link
                   to="/admin/productlist"
                   className="block px-4 py-2 hover:bg-gray-100"
                   onClick={() => setActive('')}

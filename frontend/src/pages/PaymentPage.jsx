@@ -7,12 +7,16 @@ import { savePaymentMethod } from "../slices/cartSlice";
 
 const PaymentPage = (props) => {
 	const cart = useSelector((state) => state.cart);
-	const { shippingAddress } = cart;
+	const { shippingAddress, cartItems } = cart;
 
 	const [paymentMethod, setPaymentMethod] = useState("Esewa");
 
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
+
+	// Check if any cart item is a subscription
+	const hasSubscription =
+		cartItems && cartItems.some((item) => item.category === "Subscription");
 
 	useEffect(() => {
 		if (!shippingAddress) {
@@ -48,18 +52,20 @@ const PaymentPage = (props) => {
 						<label htmlFor="esewa">Esewa</label>
 					</div>
 
-					<div className="flex gap-2 text-xl">
-						<input
-							className="border rounded p-2 text-lg"
-							type="radio"
-							id="cod"
-							name="paymentMethod"
-							value="cod"
-							checked={paymentMethod === "cod"}
-							onChange={(e) => setPaymentMethod(e.target.value)}
-						/>
-						<label htmlFor="cod">Cash on Delivery</label>
-					</div>
+					{!hasSubscription && (
+						<div className="flex gap-2 text-xl">
+							<input
+								className="border rounded p-2 text-lg"
+								type="radio"
+								id="cod"
+								name="paymentMethod"
+								value="cod"
+								checked={paymentMethod === "cod"}
+								onChange={(e) => setPaymentMethod(e.target.value)}
+							/>
+							<label htmlFor="cod">Cash on Delivery</label>
+						</div>
+					)}
 
 					<button
 						type="submit"

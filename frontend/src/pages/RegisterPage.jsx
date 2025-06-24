@@ -9,6 +9,7 @@ import { toast } from 'react-toastify'
 const RegisterPage = (props) => {
     const [name,setName]=useState('');
     const [email,setEmail]=useState('');
+    const [number,setPhoneNumber]=useState('');
     const [password,setPassword]=useState('');
     const [confirmPassword,setConfirmPassword]=useState('');
 
@@ -37,7 +38,7 @@ const RegisterPage = (props) => {
         return;
       }else{
         try{
-          const res = await register({name,email,password}).unwrap();
+          const res = await register({name,email,password,number}).unwrap();
           dispatch(setCredentials({...res,}));
           navigate(redirect);
         }catch(err){
@@ -59,6 +60,10 @@ const RegisterPage = (props) => {
             <div className='flex flex-col gap-2'>
             <label className='text-xl font-semibold text-gray-600'  htmlFor="email">Email</label>
             <input className='border rounded p-2 text-lg' type="text" placeholder='example@gmail.com' value={email} onChange={(e)=>setEmail(e.target.value)} />
+            </div>
+            <div className='flex flex-col gap-2'>
+            <label className='text-xl font-semibold text-gray-600'  htmlFor="number">Phone Number</label>
+            <input className='border rounded p-2 text-lg' type="text" placeholder='Enter your phone number' value={number} onChange={(e)=>setPhoneNumber(e.target.value)} />
             </div>
             <div className='flex flex-col gap-2'>
             <label className='text-xl font-semibold text-gray-600' htmlFor="password">Password</label>

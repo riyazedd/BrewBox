@@ -11,19 +11,25 @@ import { addToCart } from "../slices/cartSlice.js";
 import { useDispatch, useSelector } from "react-redux";
 import StarRatingInput from "../components/StarRatingInput.jsx";
 import { toast } from "react-toastify";
-import TopRated from "../components/TopRated.jsx";
+// import TopRated from "../components/TopRated.jsx";
+import Recommended from "../components/Recommended.jsx";
 
 const ProductDetails = () => {
 	const [price, setPrice] = useState(0);
 	const [size, setSize] = useState("250");
+	const [grind, setGrind] = useState("whole beans");
+	const [roast, setRoast] = useState("medium");
 	const [quantity, setQuantity] = useState(1);
 	const [rating, setRating] = useState(0);
 	const [review, setReview] = useState("");
 	const [selectedImage, setSelectedImage] = useState();
 
+	 const userLogin = useSelector((state) => state.auth)
+  	const userId = userLogin?.userInfo?._id
+
 	const { id: productId } = useParams();
 	const dispatch = useDispatch();
-	const navigate = useNavigate();
+	// const navigate = useNavigate();
 
 	const {
 		data: product,
@@ -36,11 +42,13 @@ const ProductDetails = () => {
 		useCreateReviewMutation();
 
 	const { userInfo } = useSelector((state) => state.auth);
-
+	// setRoast(product.roast); 
 	useEffect(() => {
 		if (product) {
 			setPrice(size === "250" ? product.min_price : product.max_price);
-			setSelectedImage(product.image[0]); // Default main image
+			setSelectedImage(product.image[0]); 
+			// Default roast if not provided
+			// Default main image
 			// console.log(product.image[0]);
 		}
 	}, [size, product]);
@@ -55,7 +63,7 @@ const ProductDetails = () => {
 	}, [product]);
 
 	const addToCartHandler = () => {
-		dispatch(addToCart({ ...product, quantity, price }));
+		dispatch(addToCart({ ...product, quantity, price, size, grind, roast }));
 	};
 
 	const submitHandler = async (e) => {
@@ -155,7 +163,7 @@ const ProductDetails = () => {
 											{product.category === "Subscription" && (
 												<div className="flex items-center gap-7 mt-5">
 													<p className="text-xl font-semibold">Roast: </p>
-													<select className="w-52 p-2 border border-gray-500 rounded text-lg text-gray-600">
+													<select onChange={(e) => setRoast(e.target.value)} className="w-52 p-2 border border-gray-500 rounded text-lg text-gray-600">
 														<option value="medium">Medium</option>
 														<option value="medium-dark">Medium-Dark</option>
 													</select>
@@ -163,7 +171,7 @@ const ProductDetails = () => {
 											)}
 											<div className="flex items-center gap-7 mt-5">
 												<p className="text-xl font-semibold">Grind: </p>
-												<select className="w-52 p-2 border border-gray-500 rounded text-lg text-gray-600">
+												<select onChange={(e) => setGrind(e.target.value)} className="w-52 p-2 border border-gray-500 rounded text-lg text-gray-600">
 													<option value="whole beans">Whole Beans</option>
 													<option value="standard medium">
 														Standard Medium
@@ -281,7 +289,7 @@ const ProductDetails = () => {
 
 								{/* === Top Rated Products Section === */}
 								<div className="mt-20 border-t border-gray-300 pt-10">
-									<TopRated />
+									<Recommended userId={userId} />
 								</div>
 							</>
 						) : (

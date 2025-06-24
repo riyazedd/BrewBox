@@ -27,6 +27,7 @@ import PlaceOrderScreen from './pages/PlaceOrderScreen.jsx'
 import EsewaSuccessPage from './pages/EsewaSuccessPage.jsx'
 import OrderPage from './pages/OrderPage.jsx'
 import AdminOrderList from './pages/admin/AdminOrderList.jsx'
+import AdminSubscriptionList from './pages/admin/AdminSubscriptionList.jsx'
 import AdminUserList from './pages/admin/AdminUserList.jsx'
 import AdminUpdateUser from './pages/admin/AdminUpdateUser.jsx'
 
@@ -40,6 +41,7 @@ const router=createBrowserRouter(
       <Route path='/search/:keyword/page/:pageNumber' element={<ShopPage title="shop" />}/>
       <Route path='/subscription' element={<SubscriptionPage title="subscription" />}/>
       <Route path='/subscription/page/:pageNumber' element={<SubscriptionPage title="subscription" />}/>
+      <Route path='/search/:keyword/page/:pageNumber' element={<SubscriptionPage title="subscription" />}/>
       <Route path='/about-us' element={<AboutUsPage title="about us" />}/>
       <Route path='/contact-us' element={<ContactUsPage title="contact us" />}/>
       <Route path='/cart' element={<CartPage title="Your Cart" />}/>
@@ -59,6 +61,7 @@ const router=createBrowserRouter(
       <Route path='' element={<AdminRoute />}>
         <Route path='/admin/productlist' element={<AdminProductList/>} />
         <Route path='/admin/orderlist' element={<AdminOrderList/>} />
+        <Route path='/admin/subscriptionlist' element={<AdminSubscriptionList/>} />
         <Route path='/admin/userlist' element={<AdminUserList/>} />
         <Route path='/admin/user/:id/edit' element={<AdminUpdateUser/>} />
         <Route path='/admin/productlist/:pageNumber' element={<AdminProductList/>} />

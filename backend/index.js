@@ -10,6 +10,8 @@ import orderRoutes from './routes/orderRoutes.js'
 import uploadRoutes from './routes/uploadRoute.js'
 import cors from 'cors'
 
+
+
 const PORT = process.env.PORT || 3000
 
 connectDB();
@@ -27,6 +29,8 @@ app.use(cors({
     origin:process.env.FRONTEND_URL,
     credentials:true
 }))
+
+
 
 app.get('/',(req,res)=>{
     res.send('API is running')

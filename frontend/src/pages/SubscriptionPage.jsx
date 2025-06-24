@@ -1,19 +1,24 @@
 import { React, useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import Banner from "../components/Banner";
 import { useGetProductsQuery } from "../slices/productApiSlice.js";
 import ProductCard from "../components/ProductCard.jsx";
 
 const SubscriptionPage = (props) => {
 	const [product, setProduct] = useState([]);
-
-	const { data: products, isLoading, error } = useGetProductsQuery();
+	const { pageNumber, keyword } = useParams();
+	
+	  const { data, isLoading, error } = useGetProductsQuery({
+		keyword,
+		pageNumber,
+	  });
 
 	useEffect(() => {
-		if (products) {
-			const subscriptionProducts = products.filter((p) => p.category === "Subscription");
+		if (data) {
+			const subscriptionProducts = data.products ? data.products.filter((p) => p.category === "Subscription") : [];
 			setProduct(subscriptionProducts);
 		}
-	}, [products]); 
+	}, [data]);
 
 	return (
 		<div>

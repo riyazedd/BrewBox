@@ -80,41 +80,53 @@ const ProfilePage = (props) => {
       ) : (
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200 text-sm text-left">
-            <thead className="bg-gray-100">
-              <tr>
-                <th className="px-4 py-2 font-semibold">ID</th>
-                <th className="px-4 py-2 font-semibold">DATE</th>
-                <th className="px-4 py-2 font-semibold">TOTAL</th>
-                <th className="px-4 py-2 font-semibold">DELIVERED</th>
-                <th className="px-4 py-2 font-semibold"></th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-200">
-              {orders.map((order) => (
-                <tr key={order._id} className="hover:bg-gray-50">
-                  <td className="px-4 py-2">{order._id}</td>
-                  <td className="px-4 py-2">{order.createdAt.substring(0, 10)}</td>
-                  <td className="px-4 py-2">Rs.{order.totalPrice.toFixed(2)}</td>
-                  
-                  <td className="px-4 py-2">
-                    {order.isDelivered ? (
-                      order.deliveredAt.substring(0, 10)
-                    ) : (
-                      <FaTimes className="text-red-600" />
-                    )}
-                  </td>
-                  <td className="px-4 py-2">
-                    <Link
-                      to={`/order/${order._id}`}
-                      className="inline-block px-3 py-1 text-sm border border-gray-300 rounded hover:bg-gray-100"
-                    >
-                      Details
-                    </Link>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+      <thead className="bg-gray-100">
+        <tr>
+          <th className="px-4 py-2 font-semibold">ID</th>
+          <th className="px-4 py-2 font-semibold">DATE</th>
+          <th className="px-4 py-2 font-semibold">TOTAL</th>
+          <th className="px-4 py-2 font-semibold">DELIVERED</th>
+          <th className="px-4 py-2 font-semibold"></th>
+        </tr>
+      </thead>
+
+      <tbody className="divide-y divide-gray-200">
+        {orders && orders.length > 0 ? (
+          orders.map((order) => (
+            <tr key={order._id} className="hover:bg-gray-50">
+              <td className="px-4 py-2">{order._id}</td>
+              <td className="px-4 py-2">
+                {order.createdAt ? order.createdAt.substring(0, 10) : 'N/A'}
+              </td>
+              <td className="px-4 py-2">
+                Rs.{order.totalPrice?.toFixed(2) ?? '0.00'}
+              </td>
+              <td className="px-4 py-2">
+                {order.isDelivered ? (
+                  order.deliveredAt ? order.deliveredAt.substring(0, 10) : '✔'
+                ) : (
+                  <FaTimes className="text-red-600" />
+                )}
+              </td>
+              <td className="px-4 py-2">
+                <Link
+                  to={`/order/${order._id}`}
+                  className="inline-block px-3 py-1 text-sm border border-gray-300 rounded hover:bg-gray-100"
+                >
+                  Details
+                </Link>
+              </td>
+            </tr>
+          ))
+        ) : (
+          <tr>
+            <td colSpan="5" className="text-center py-4">
+              No orders found
+            </td>
+          </tr>
+        )}
+      </tbody>
+    </table>
         </div>
       )}
     </div>

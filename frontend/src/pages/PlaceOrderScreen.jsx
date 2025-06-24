@@ -64,6 +64,9 @@ const PlaceOrderScreen = () => {
         orderItems: cart.cartItems.map(item => ({
           name: item.product_name,
           qty: item.quantity,
+          size: item.size,
+          grind: item.grind,
+          roast: item.roast,
           image: item.image[0],
           price: item.price,
           product: item._id,
@@ -129,6 +132,12 @@ const PlaceOrderScreen = () => {
                       >
                         {item.product_name}
                       </Link>
+                      <div className="text-sm text-gray-600 capitalize">
+                        Size: {item.size}, Grind: {item.grind}
+                        {item.category === 'Subscription' && (
+                          <span className="ml-2 text-green-600">Roast: {item.roast}</span>
+                        )}
+                      </div>
                     </div>
                     <div className="text-right">
                       {item.quantity} x Rs.{item.price} = Rs.{' '}

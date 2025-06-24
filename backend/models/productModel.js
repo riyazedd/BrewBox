@@ -14,6 +14,10 @@ const reviewSchema = mongoose.Schema({
         type: Number,
         required: true
     },
+    sentimentScore: {
+        type: Number,
+        default: 0
+    },
     comment:{
         type: String,
         required: true

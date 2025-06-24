@@ -51,7 +51,10 @@ const CartPage = (props) => {
 													<div className="flex items-center gap-2">
 														<img
 															className="h-12 w-12 object-cover"
-															src={item.image}
+															src={`${
+													import.meta.env.VITE_BACKEND_URL ||
+													"http://localhost:3000"
+												}${item.image}`}
 															alt="Product"
 														/>
 														<span className="font-semibold text-sm md:text-base">

@@ -66,7 +66,7 @@ const OrderPage = () => {
           <div className="p-4 border rounded-lg shadow-sm bg-white">
             <h2 className="text-xl font-semibold mb-2">Payment Method</h2>
             <p className='flex gap-2'>
-              <span className="font-medium ">Method:</span><p className='uppercase'>{order.paymentMethod}</p>
+              <span className="font-medium ">Method:</span><span className='uppercase'>{order.paymentMethod}</span>
             </p>
             
           </div>
@@ -79,20 +79,28 @@ const OrderPage = () => {
             ) : (
               <ul className="space-y-4">
                 {order.orderItems.map((item, index) => (
-                  <li key={index} className="flex items-center space-x-4">
-                    <img
+                  <li key={index} className="flex justify-between items-center">
+                   <div className='flex items-center gap-4'>
+                     <img
                       src={`${
                         import.meta.env.VITE_BACKEND_URL || "http://localhost:3000"
                       }${item.image}`}
                       alt={item.name}
                       className="w-12 h-12 object-cover rounded"
                     />
-                    <div className="flex-1">
-                      <Link to={`/product/${item.product}`} className="text-blue-600 underline">
+                    <div className="flex gap-2">
+                      <Link to={`/product/${item.product}`} className="text-blue-600 underline text-lg">
                         {item.name}
                       </Link>
+                      <div className="text-lg text-gray-600 capitalize">
+                        {item.product.category === 'Subscription' && (
+                          <span className="mr-2 text-green-600">Roast: {item.roast}</span>
+                        )}
+                        (Size: {item.size}, Grind: {item.grind})
+                      </div>
                     </div>
-                    <div className="text-sm">
+                   </div>
+                    <div className="text-lg">
                       {item.qty} x Rs.{item.price} = Rs.{item.qty * item.price}
                     </div>
                   </li>

@@ -1,9 +1,17 @@
 import asyncHandler from '../middleware/asyncHandler.js';
 import Product from '../models/productModel.js';
-import fs from 'fs';
-import path from 'path';
-// import dotenv from 'dotenv';
-// dotenv.config();
+import natural from 'natural';
+
+const tokenizer = new natural.WordTokenizer();
+const stopwords = new Set(natural.stopwords);
+const analyzer = new natural.SentimentAnalyzer('English', natural.PorterStemmer, 'afinn');
+
+// Utility: Compute sentiment score from a comment
+function analyzeSentiment(comment) {
+  const tokens = tokenizer.tokenize(comment.toLowerCase());
+  const filtered = tokens.filter(word => !stopwords.has(word));
+  return analyzer.getSentiment(filtered);
+}
 
 // @desc    Fetch all products
 // @route   GET /api/products
@@ -11,8 +19,6 @@ import path from 'path';
 const getProducts = asyncHandler(async (req, res) => {
   const pageSize = 8;
   const page = Number(req.query.pageNumber) || 1;
-  
-  
 
   const keyword = req.query.keyword
     ? {
@@ -24,8 +30,7 @@ const getProducts = asyncHandler(async (req, res) => {
     : {};
 
   const count = await Product.countDocuments({ ...keyword });
-  // const count = await Product.countDocuments();
-  // const products = await Product.find({})
+
   const products = await Product.find({ ...keyword })
     .limit(pageSize)
     .skip(pageSize * (page - 1));
@@ -39,9 +44,10 @@ const getProducts = asyncHandler(async (req, res) => {
 const getProductById = asyncHandler(async (req, res) => {
   const product = await Product.findById(req.params.id);
   if (product) {
-    return res.json(product);
+    res.json(product);
   } else {
-    res.status(404).json({ message: 'Product not found' });
+    res.status(404);
+    throw new Error('Product not found');
   }
 });
 
@@ -60,15 +66,15 @@ const createProduct = asyncHandler(async (req, res) => {
   } = req.body;
 
   if (!Array.isArray(image) || image.length === 0) {
-    res.status(400).json({ message: 'At least one image is required' });
-    return;
+    res.status(400);
+    throw new Error('At least one image is required');
   }
 
   const product = new Product({
     product_name,
     min_price,
     max_price,
-    image, 
+    image,
     category,
     countInStock,
     description,
@@ -79,14 +85,19 @@ const createProduct = asyncHandler(async (req, res) => {
   res.status(201).json(createdProduct);
 });
 
-
-
 // @desc    Update a product
 // @route   PUT /api/products/:id
 // @access  Private/Admin
 const updateProduct = asyncHandler(async (req, res) => {
-  const { product_name, min_price, max_price, description, image, category, countInStock } =
-    req.body;
+  const {
+    product_name,
+    min_price,
+    max_price,
+    description,
+    image,
+    category,
+    countInStock,
+  } = req.body;
 
   const product = await Product.findById(req.params.id);
 
@@ -96,10 +107,9 @@ const updateProduct = asyncHandler(async (req, res) => {
     product.max_price = max_price;
     product.description = description;
 
-    // Ensure image is always an array and not empty
     if (!Array.isArray(image) || image.length === 0) {
-      res.status(400).json({ message: 'At least one image is required' });
-      return;
+      res.status(400);
+      throw new Error('At least one image is required');
     }
     product.image = image;
 
@@ -109,9 +119,13 @@ const updateProduct = asyncHandler(async (req, res) => {
     const updatedProduct = await product.save();
     res.json(updatedProduct);
   } else {
-    res.status(404).json({ message: 'Product not found' });
+    res.status(404);
+    throw new Error('Product not found');
   }
 });
+
+import fs from 'fs';
+import path from 'path';
 
 // @desc    Delete a product
 // @route   DELETE /api/products/:id
@@ -120,14 +134,11 @@ const deleteProduct = asyncHandler(async (req, res) => {
   const product = await Product.findById(req.params.id);
 
   if (product) {
-    // Delete images from uploads folder
     if (product.image && Array.isArray(product.image)) {
       product.image.forEach(imgPath => {
-        // Remove leading slash if present
         const relativePath = imgPath.startsWith('/') ? imgPath.slice(1) : imgPath;
         const filePath = path.join(process.cwd(), relativePath);
         fs.unlink(filePath, err => {
-          // Log error but don't throw, so product deletion continues
           if (err && err.code !== 'ENOENT') {
             console.error(`Failed to delete image: ${filePath}`, err);
           }
@@ -138,7 +149,8 @@ const deleteProduct = asyncHandler(async (req, res) => {
     await Product.deleteOne({ _id: product._id });
     res.json({ message: 'Product removed' });
   } else {
-    res.status(404).json({ message: 'Product not found' });
+    res.status(404);
+    throw new Error('Product not found');
   }
 });
 
@@ -152,31 +164,35 @@ const createProductReview = asyncHandler(async (req, res) => {
 
   if (product) {
     const alreadyReviewed = product.reviews.find(
-      (r) => r.user.toString() === req.user._id.toString()
+      r => r.user.toString() === req.user._id.toString()
     );
 
     if (alreadyReviewed) {
-      res.status(400).json({ message: 'Product already reviewed' });
-      return;
+      res.status(400);
+      throw new Error('Product already reviewed');
     }
+
+    const sentimentScore = analyzeSentiment(comment);
 
     const review = {
       name: req.user.name,
       rating: Number(rating),
       comment,
+      sentimentScore,
       user: req.user._id,
     };
 
     product.reviews.push(review);
-
     product.numReviews = product.reviews.length;
-
-    product.rating = product.reviews.reduce((acc, item) => item.rating + acc, 0) / product.reviews.length;
+    product.rating =
+      product.reviews.reduce((acc, item) => item.rating + acc, 0) /
+      product.reviews.length;
 
     await product.save();
     res.status(201).json({ message: 'Review added' });
   } else {
-    res.status(404).json({ message: 'Product not found' });
+    res.status(404);
+    throw new Error('Product not found');
   }
 });
 
@@ -185,8 +201,28 @@ const createProductReview = asyncHandler(async (req, res) => {
 // @access  Public
 const getTopProducts = asyncHandler(async (req, res) => {
   const products = await Product.find({}).sort({ rating: -1 }).limit(4);
-
   res.json(products);
+});
+
+// @desc    Get recommended products based on sentiment analysis
+// @route   GET /api/products/recommend/:userId
+// @access  Public
+const getRecommendedProducts = asyncHandler(async (req, res) => {
+  const products = await Product.find({}).lean();
+
+  const productSentiments = products.map(product => {
+    const sentimentSum = product.reviews.reduce(
+      (sum, review) => sum + (review.sentimentScore || analyzeSentiment(review.comment)),
+      0
+    );
+    const avgSentiment = product.reviews.length > 0 ? sentimentSum / product.reviews.length : 0;
+    // console.log(`Product: ${product.product_name}, Avg Sentiment: ${avgSentiment}`);
+    return { ...product, avgSentiment };
+  });
+
+  productSentiments.sort((a, b) => b.avgSentiment - a.avgSentiment);
+  const recommended = productSentiments.slice(0, 4);
+  res.json(recommended);
 });
 
 export {
@@ -197,4 +233,5 @@ export {
   deleteProduct,
   createProductReview,
   getTopProducts,
+  getRecommendedProducts,
 };
