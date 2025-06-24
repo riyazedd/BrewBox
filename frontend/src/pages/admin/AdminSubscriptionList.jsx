@@ -79,7 +79,7 @@ const AdminSubscriptionList = () => {
 	}, [coffeeOrders, deliveredFilter]);
 
 	return (
-		<div className="mx-20 my-10">
+		<div className="">
 			<div className="justify-between">
 				<div className="flex justify-between">
 					<div className="flex items-center text-2xl gap-2">

@@ -29,7 +29,7 @@ const AdminOrderList = () => {
 	}, [coffeeOrders, deliveredFilter]);
 
   return (
-    <div className="mx-20 my-10">
+    <div className="">
 			<div className="justify-between">
 				<div className="flex justify-between">
 									<div className="flex items-center text-2xl gap-2">
@@ -101,7 +101,7 @@ const AdminOrderList = () => {
 								</tr>
 							</thead>
 							<tbody className="divide-y divide-gray-300 ">
-								{coffeeOrders.map((order) => (
+								{filteredOrders.map((order) => (
 									<tr
 										key={order._id}
 										className="bg-white transition-all duration-500 hover:bg-gray-50"
@@ -129,7 +129,7 @@ const AdminOrderList = () => {
                                              )}
 										</td>
                                         <td>
-                                            <Link to={`/order/${order._id}`}>
+                                            <Link to={`/admin/order/${order._id}`}>
                                                 <button className='px-4 py-2 rounded bg-gray-200 hover:cursor-pointer'>Details</button>
                                             </Link>
                                         </td>

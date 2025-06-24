@@ -71,7 +71,7 @@ const AdminUpdateProduct = () => {
   };
 
   return (
-    <div className="mx-20 my-10">
+    <div className="">
       <Link to='/admin/productlist' className='bg-green-700 text-white px-2 py-1 rounded'>Go Back</Link>
       <h2 className="text-2xl font-bold mt-4 text-gray-700">Update Product Detail</h2>
 

@@ -46,7 +46,7 @@ const AdminUserList = () => {
 // 	};
 
     return (
-        <div className="mx-20 my-10">
+        <div className="">
             <div className="flex items-center justify-between">
                 <div className="flex items-center text-2xl gap-2">
                     <FaList />
@@ -60,7 +60,7 @@ const AdminUserList = () => {
                 <>{error.message}</>
             ) : (
                 <>
-                    <div className="overflow-hidden mt-10 ">
+                    <div className="overflow-hidden mt-6">
                         <table className=" min-w-full rounded-xl">
                             <thead>
                                 <tr className="bg-gray-50 uppercase">

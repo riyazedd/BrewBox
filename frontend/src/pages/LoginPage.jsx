@@ -23,7 +23,11 @@ const LoginPage = (props) => {
 
     useEffect(()=>{
       if(userInfo){
-        navigate(redirect);
+        if(userInfo.isAdmin){
+          navigate('/admin/dashboard');
+        } else {
+          navigate(redirect);
+        }
       }
     },[userInfo,redirect,navigate]);
 
@@ -32,7 +36,11 @@ const LoginPage = (props) => {
       try{
         const res = await login({email,password}).unwrap();
         dispatch(setCredentials({...res,}));
-        navigate(redirect)
+        if(res.isAdmin){
+          navigate('/admin/dashboard');
+        } else {
+          navigate(redirect);
+        }
         toast.success("Logged in Successfully")
 
       }catch(err){

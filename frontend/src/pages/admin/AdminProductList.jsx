@@ -46,7 +46,7 @@ const AdminProductList = () => {
 // 	};
 
 	return (
-		<div className="mx-20 my-10">
+		<div className="">
 			<div className="flex items-center justify-between">
 				<div className="flex items-center text-2xl gap-2">
 					<FaList />
