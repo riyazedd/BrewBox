@@ -3,5 +3,7 @@
     src: url('../src/assets/fonts/LeagueSpartan-Regular.ttf');
 }
 
-@import 'tailwindcss'
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
 

@@ -32,7 +32,7 @@ const AdminSubscriptionList = () => {
 			(item) => item.product && item.product.category === "Subscription"
 		);
 
-		console.log(subItem);
+		// console.log(subItem);
 		// Extract duration from product name (e.g., '3 Months Subscription')
 		if (subItem && typeof subItem.name === "string") {
 			const match = subItem.name.match(/(\d+)\s*months?/i);
@@ -104,7 +104,11 @@ const AdminSubscriptionList = () => {
 				{isLoading ? (
 					<>Loading...</>
 				) : error ? (
-					<>{error}</>
+					<>{
+                        typeof error === 'string'
+                            ? error
+                            : error?.data?.message || error?.error || JSON.stringify(error)
+                    }</>
 				) : (
 					<div className="overflow-hidden mt-10 ">
 						<table className=" min-w-full rounded-xl">

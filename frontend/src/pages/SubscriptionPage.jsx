@@ -26,7 +26,7 @@ const SubscriptionPage = (props) => {
 			{isLoading ? (
 				<div>Loading...</div>
 			) : error ? (
-				<div>{error.data?.message || error.error}</div>
+				<div>{typeof error === 'string' ? error : error?.data?.message || error?.error || JSON.stringify(error)}</div>
 			) : (
 				<div className="flex justify-center">
 					<div className="grid grid-cols-4 m-10 gap-10">

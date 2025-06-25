@@ -13,7 +13,7 @@ const orderSchema = mongoose.Schema({
 			image: { type: String, required: true },
 			size: { type: Number, required: true },
 			grind: { type: String, required: true },
-            roast: { type: String, required: true },
+            roast: { type: String},
 			price: { type: Number, required: true },
 			product: {
 				type: mongoose.Schema.Types.ObjectId,
