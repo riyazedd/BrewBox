@@ -1,4 +1,4 @@
-import {useState,useEffect} from 'react'
+import {useState,useEffect, useMemo} from 'react'
 import { Link } from 'react-router-dom'
 import { useDispatch,useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
@@ -7,10 +7,12 @@ import { useGetMyOrdersQuery } from '../slices/ordersApiSlice';
 import { setCredentials } from '../slices/authSlice'
 import Banner from '../components/Banner'
 import { FaTimes } from 'react-icons/fa'
+import { set } from 'mongoose'
 
 const ProfilePage = (props) => {
     const [name,setName]=useState("");
     const [email,setEmail]=useState("");
+    const [number,setNumber]=useState("");
     const [password,setPassword]=useState("");
     const [confirmPassword,setConfirmPassword]=useState("");
 
@@ -26,8 +28,9 @@ const ProfilePage = (props) => {
         if(userInfo){
             setName(userInfo.name);
             setEmail(userInfo.email);
+            setNumber(userInfo.number);
         }
-    },[userInfo.name, userInfo.email])
+    },[userInfo.name, userInfo.email], userInfo.number);
 
     const submitHandler= async(e)=>{
         e.preventDefault();
@@ -35,7 +38,7 @@ const ProfilePage = (props) => {
             toast.error("Password donot match!");
         }else{
             try{
-                const res = await updateProfile({_id:userInfo._id,name,email,password}).unwrap();
+                const res = await updateProfile({_id:userInfo._id,name,email,number,password}).unwrap();
                 dispatch(setCredentials(res));
                 toast.success("Profile Updated Successfully");
             }catch(error){
@@ -43,6 +46,17 @@ const ProfilePage = (props) => {
             }
         }
     }
+
+    const [deliveredFilter, setDeliveredFilter] = useState("all");
+      
+      const filteredOrders = useMemo(() => {
+        if (deliveredFilter === "all") return orders;
+        if (deliveredFilter === "delivered")
+          return orders.filter((o) => o.isDelivered);
+        if (deliveredFilter === "notDelivered")
+          return orders.filter((o) => !o.isDelivered);
+        return orders;
+      }, [orders, deliveredFilter]);
   return (
     <div>
       <Banner title={props.title} />
@@ -58,6 +72,10 @@ const ProfilePage = (props) => {
             <input className='border rounded p-2 text-lg' type="text" placeholder='example@gmail.com' value={email} onChange={(e)=>setEmail(e.target.value)} />
             </div>
             <div className='flex flex-col gap-2'>
+            <label className='text-xl font-semibold text-gray-600'  htmlFor="number">Phone Number</label>
+            <input className='border rounded p-2 text-lg' type="text" placeholder='98XXXXXXXX' value={number} onChange={(e)=>setNumber(e.target.value)} />
+            </div>
+            <div className='flex flex-col gap-2'>
             <label className='text-xl font-semibold text-gray-600' htmlFor="password">Password</label>
             <input className='border rounded p-2 text-lg' type="password" placeholder='Enter Password' value={password} onChange={(e)=>setPassword(e.target.value)} />
             </div>
@@ -70,7 +88,23 @@ const ProfilePage = (props) => {
         </form>
       </div>
       <div className="md:col-span-9 mt-10">
-      <h2 className="text-2xl font-bold mb-4 text-gray-700">My Orders</h2>
+      <div className='flex items-end justify-between'>
+        <h2 className="text-2xl font-bold mb-4 text-gray-700">My Orders</h2>
+      <div className="my-4 text-md">
+										<label className="mr-2 font-medium">
+											Filter by Delivered Status:
+										</label>
+										<select
+											value={deliveredFilter}
+											onChange={(e) => setDeliveredFilter(e.target.value)}
+											className="border rounded px-2 py-1"
+										>
+											<option value="all">All</option>
+											<option value="delivered">Delivered</option>
+											<option value="notDelivered">Not Delivered</option>
+										</select>
+									</div>
+      </div>
       {isLoading ? (
        <>Loading... </>
       ) : error ? (
@@ -91,8 +125,8 @@ const ProfilePage = (props) => {
       </thead>
 
       <tbody className="divide-y divide-gray-200">
-        {orders && orders.length > 0 ? (
-          orders.map((order) => (
+        {filteredOrders && filteredOrders.length > 0 ? (
+          filteredOrders.map((order) => (
             <tr key={order._id} className="hover:bg-gray-50">
               <td className="px-4 py-2">{order._id}</td>
               <td className="px-4 py-2">
