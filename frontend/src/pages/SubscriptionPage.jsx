@@ -28,8 +28,8 @@ const SubscriptionPage = (props) => {
 			) : error ? (
 				<div>{typeof error === 'string' ? error : error?.data?.message || error?.error || JSON.stringify(error)}</div>
 			) : (
-				<div className="flex justify-center">
-					<div className="grid grid-cols-4 m-10 gap-10">
+				<div className="flex justify-center p-8 sm:p-0">
+					<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 m-4 sm:m-6 md:m-10 gap-4 sm:gap-6 md:gap-10 w-full">
 						{product.length > 0 ? (
 							product.map((p) => <ProductCard product={p} key={p._id} />)
 						) : (

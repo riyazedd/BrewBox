@@ -93,10 +93,10 @@ const ProductDetails = () => {
 				<>
 					<div className="flex flex-col justify-center items-center">
 						{product ? (
-							<>
-								<div className="my-10 mx-30 flex gap-10 w-[81%]">
+							<div className="">
+								<div className="p-5 sm:my-10 sm:mx-6 md:mx-30 flex flex-col md:flex-row gap-6 md:gap-10 w-full md:w-[81%]">
 									{/* === Main Image + Gallery === */}
-									<div className="w-[50%]">
+									<div className="w-full md:w-[50%]">
 										{selectedImage && (
 											<img
 												src={`${
@@ -104,13 +104,13 @@ const ProductDetails = () => {
 													"http://localhost:3000"
 												}${selectedImage}`}
 												alt="product"
-												className="w-[100%] h-[600px] object-cover border border-gray-100 rounded mb-4"
+												className="w-full h-60 sm:h-80 md:h-[600px] object-cover border border-gray-100 rounded mb-4"
 											/>
 										)}
 
 										{/* Image Thumbnails */}
 										{product.image && product.image.length > 0 && (
-											<div className="flex gap-3 flex-wrap">
+											<div className="flex gap-2 sm:gap-3 flex-wrap">
 												{product.image.map((img, idx) => (
 													<img
 														key={idx}
@@ -119,7 +119,7 @@ const ProductDetails = () => {
 															"http://localhost:3000"
 														}${img}`}
 														alt={`thumb-${idx}`}
-														className={`w-20 h-20 object-cover border rounded cursor-pointer ${
+														className={`w-14 h-14 sm:w-20 sm:h-20 object-cover border rounded cursor-pointer ${
 															selectedImage === img
 																? "ring-2 ring-green-600"
 																: ""
@@ -132,12 +132,12 @@ const ProductDetails = () => {
 									</div>
 
 									{/* === Product Info === */}
-									<div className="w-[50%] flex flex-col ">
+									<div className="w-full md:w-[50%] flex flex-col ">
 										<BreadCrumb product={product} />
-										<h1 className="text-3xl font-semibold mt-8 font-[Helvetica] text-gray-800">
+										<h1 className="text-2xl sm:text-3xl font-semibold mt-4 sm:mt-8 font-[Helvetica] text-gray-800">
 											{product.product_name}
 										</h1>
-										<h1 className="text-2xl font-semibold text-green-800 mt-5">
+										<h1 className="text-xl sm:text-2xl font-semibold text-green-800 mt-3 sm:mt-5">
 											Rs {product.min_price} - Rs {product.max_price}
 										</h1>
 										<div className="mt-2">
@@ -146,32 +146,32 @@ const ProductDetails = () => {
 												text={`${product.numReviews} reviews`}
 											/>
 										</div>
-										<p className="mt-8 text-lg text-gray-600 text-justify">
+										<p className="mt-4 sm:mt-8 text-base sm:text-lg text-gray-600 text-justify">
 											{product.description}
 										</p>
-										<div className="mt-10">
-											<div className="flex items-center gap-10">
-												<p className="text-xl font-semibold">Size: </p>
+										<div className="mt-6 sm:mt-10">
+											<div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-10">
+												<p className="text-lg sm:text-xl font-semibold">Size: </p>
 												<select
 													onChange={(e) => setSize(e.target.value)}
-													className="w-52 p-2 border border-gray-500 rounded text-lg text-gray-600"
+													className="w-full sm:w-52 p-2 border border-gray-500 rounded text-base sm:text-lg text-gray-600"
 												>
 													<option value="250">250gm</option>
 													<option value="500">500gm</option>
 												</select>
 											</div>
 											{product.category === "Subscription" && (
-												<div className="flex items-center gap-7 mt-5">
-													<p className="text-xl font-semibold">Roast: </p>
-													<select onChange={(e) => setRoast(e.target.value)} className="w-52 p-2 border border-gray-500 rounded text-lg text-gray-600">
+												<div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-7 mt-4 sm:mt-5">
+													<p className="text-lg sm:text-xl font-semibold">Roast: </p>
+													<select onChange={(e) => setRoast(e.target.value)} className="w-full sm:w-52 p-2 border border-gray-500 rounded text-base sm:text-lg text-gray-600">
 														<option value="medium">Medium</option>
 														<option value="medium-dark">Medium-Dark</option>
 													</select>
 												</div>
 											)}
-											<div className="flex items-center gap-7 mt-5">
-												<p className="text-xl font-semibold">Grind: </p>
-												<select onChange={(e) => setGrind(e.target.value)} className="w-52 p-2 border border-gray-500 rounded text-lg text-gray-600">
+											<div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-7 mt-4 sm:mt-5">
+												<p className="text-lg sm:text-xl font-semibold">Grind: </p>
+												<select onChange={(e) => setGrind(e.target.value)} className="w-full sm:w-52 p-2 border border-gray-500 rounded text-base sm:text-lg text-gray-600">
 													<option value="whole beans">Whole Beans</option>
 													<option value="standard medium">
 														Standard Medium
@@ -181,19 +181,19 @@ const ProductDetails = () => {
 													<option value="home espresso">Home Espresso</option>
 												</select>
 											</div>
-											<div className="mt-5">
-												<p className="text-2xl font-bold text-green-800">
+											<div className="mt-4 sm:mt-5">
+												<p className="text-xl sm:text-2xl font-bold text-green-800">
 													Rs {price}
 												</p>
 											</div>
-											<div className="mt-5 flex gap-3">
+											<div className="mt-4 sm:mt-5 flex flex-col sm:flex-row gap-3">
 												<QuantitySelector
 													quantity={quantity}
 													setQuantity={setQuantity}
 												/>
 												<button
 													onClick={addToCartHandler}
-													className="bg-green-800 text-white font-bold text-lg p-2 hover:cursor-pointer"
+													className="bg-green-800 text-white font-bold text-base sm:text-lg p-2 hover:cursor-pointer"
 												>
 													ADD TO CART
 												</button>
@@ -203,9 +203,9 @@ const ProductDetails = () => {
 								</div>
 
 								{/* === Reviews Section === */}
-								<div className="flex flex-col justify-center md:flex-row w-full">
-									<div className="w-full md:w-1/2 p-4">
-										<h2 className="text-2xl font-semibold mb-4">Reviews</h2>
+								<div className="flex flex-col items-center w-full md:w-[100%]">
+									<div className="w-full md:w-1/2 p-2 sm:p-4">
+										<h2 className="text-xl sm:text-2xl font-semibold mb-2 sm:mb-4">Reviews</h2>
 										{product.reviews.length === 0 && (
 											<div className="bg-yellow-100 text-yellow-800 p-3 rounded mb-4">
 												No Reviews
@@ -215,11 +215,11 @@ const ProductDetails = () => {
 											{product.reviews.map((review) => (
 												<div
 													key={review._id}
-													className="border border-gray-200 p-4 rounded shadow-sm"
+													className="border border-gray-200 p-3 sm:p-4 rounded shadow-sm"
 												>
 													<div className="flex items-center mb-2 justify-between">
 														<strong className="block">{review.name}</strong>
-														<p className="text-sm text-gray-500">
+														<p className="text-xs sm:text-sm text-gray-500">
 															{review.createdAt.substring(0, 10)}
 														</p>
 													</div>
@@ -227,13 +227,13 @@ const ProductDetails = () => {
 													<p>{review.comment}</p>
 												</div>
 											))}
-											<div className="border border-gray-300 p-4 rounded shadow-sm">
-												<h2 className="text-xl font-semibold mb-4">
+											<div className="border border-gray-300 p-3 sm:p-4 rounded shadow-sm">
+												<h2 className="text-lg sm:text-xl font-semibold mb-2 sm:mb-4">
 													Write a Customer Review
 												</h2>
 												{loadingReview && <>Loading...</>}
 												{userInfo ? (
-													<form onSubmit={submitHandler} className="space-y-4">
+													<form onSubmit={submitHandler} className="space-y-3 sm:space-y-4">
 														<div>
 															<label
 																htmlFor="rating"
@@ -288,10 +288,10 @@ const ProductDetails = () => {
 								</div>
 
 								{/* === Top Rated Products Section === */}
-								<div className="mt-20 border-t border-gray-300 pt-10">
+								<div className="mt-10 sm:mt-20 border-t border-gray-300 pt-6 sm:pt-10">
 									<Recommended userId={userId} />
 								</div>
-							</>
+							</div>
 						) : (
 							<div>
 								<h1>No product found</h1>

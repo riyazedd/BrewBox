@@ -106,38 +106,38 @@ const PlaceOrderScreen = () => {
   };
 
   return (
-    <div className="px-4 py-6">
+    <div className="px-2 sm:px-4 py-4 sm:py-6 flex flex-col items-center w-full">
       <CheckoutSteps step1 step2 step3 step4 />
-      <div className="grid md:grid-cols-3 gap-6 mt-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 mt-4 sm:mt-6 w-full max-w-5xl">
         {/* Left Column */}
-        <div className="md:col-span-2 space-y-6">
+        <div className="md:col-span-2 space-y-4 sm:space-y-6">
           {/* Shipping Info */}
-          <div className="bg-white shadow-md rounded-lg p-4">
-            <h2 className="text-lg font-semibold mb-2">Shipping</h2>
-            <p>
+          <div className="bg-white shadow-md rounded-lg p-3 sm:p-4">
+            <h2 className="text-base sm:text-lg font-semibold mb-1 sm:mb-2">Shipping</h2>
+            <p className="text-sm sm:text-base">
               <span className="font-semibold">Address:</span>{' '}
               {cart.shippingAddress.address}, {cart.shippingAddress.city}
             </p>
           </div>
 
           {/* Payment Method */}
-          <div className="bg-white shadow-md rounded-lg p-4">
-            <h2 className="text-lg font-semibold mb-2">Payment Method</h2>
-            <p>
+          <div className="bg-white shadow-md rounded-lg p-3 sm:p-4">
+            <h2 className="text-base sm:text-lg font-semibold mb-1 sm:mb-2">Payment Method</h2>
+            <p className="text-sm sm:text-base">
               <span className="font-semibold">Method:</span>{' '}
               {cart.paymentMethod}
             </p>
           </div>
 
           {/* Order Items */}
-          <div className="bg-white shadow-md rounded-lg p-4">
-            <h2 className="text-lg font-semibold mb-2">Order Items</h2>
+          <div className="bg-white shadow-md rounded-lg p-3 sm:p-4">
+            <h2 className="text-base sm:text-lg font-semibold mb-1 sm:mb-2">Order Items</h2>
             {cart.cartItems.length === 0 ? (
               <>Your cart is empty</>
             ) : (
-              <ul className="space-y-4">
+              <ul className="space-y-3 sm:space-y-4">
                 {cart.cartItems.map((item, index) => (
-                  <li key={index} className="flex items-center gap-4">
+                  <li key={index} className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4">
                     <img
                       src={`${
                         import.meta.env.VITE_BACKEND_URL || "http://localhost:3000"
@@ -148,18 +148,18 @@ const PlaceOrderScreen = () => {
                     <div className="flex-1">
                       <Link
                         to={`/product/${item.product}`}
-                        className="text-blue-600 hover:underline"
+                        className="text-blue-600 hover:underline text-sm sm:text-base"
                       >
                         {item.product_name}
                       </Link>
-                      <div className="text-sm text-gray-600 capitalize">
+                      <div className="text-xs sm:text-sm text-gray-600 capitalize">
                         Size: {item.size}, Grind: {item.grind}
                         {item.category === 'Subscription' && (
                           <span className="ml-2 text-green-600">Roast: {item.roast}</span>
                         )}
                       </div>
                     </div>
-                    <div className="text-right">
+                    <div className="text-right text-xs sm:text-base">
                       {item.quantity} x Rs.{item.price} = Rs.{' '}
                       {(item.quantity * item.price).toFixed(2)}
                     </div>
@@ -171,27 +171,27 @@ const PlaceOrderScreen = () => {
         </div>
 
         {/* Right Column - Summary */}
-        <div className="bg-white shadow-md rounded-lg p-4 space-y-4">
-          <h2 className="text-lg font-semibold">Order Summary</h2>
-          <div className="flex justify-between border-b pb-2">
+        <div className="bg-white shadow-md rounded-lg p-3 sm:p-4 space-y-3 sm:space-y-4 md:sticky md:top-24 h-fit">
+          <h2 className="text-base sm:text-lg font-semibold">Order Summary</h2>
+          <div className="flex justify-between border-b pb-1 sm:pb-2 text-sm sm:text-base">
             <span>Items</span>
             <span>Rs.{itemsPrice}</span>
           </div>
-          <div className="flex justify-between border-b pb-2">
+          <div className="flex justify-between border-b pb-1 sm:pb-2 text-sm sm:text-base">
             <span>Shipping</span>
             <span>Rs.{cart.shippingPrice}</span>
           </div>
-          <div className="flex justify-between border-b pb-2">
+          <div className="flex justify-between border-b pb-1 sm:pb-2 text-sm sm:text-base">
             <span>Tax</span>
             <span>Rs.{taxPrice}</span>
           </div>
-          <div className="flex justify-between font-bold text-lg">
+          <div className="flex justify-between font-bold text-base sm:text-lg">
             <span>Total</span>
             <span>Rs.{totalPrice}</span>
           </div>
 
           {error && (
-            <div className="text-red-600">
+            <div className="text-red-600 text-sm sm:text-base">
               <>{error?.data?.message}</>
             </div>
           )}
@@ -222,7 +222,7 @@ const PlaceOrderScreen = () => {
             type="button"
             disabled={cart.cartItems.length === 0 || isLoading}
             onClick={placeOrderHandler}
-            className={`w-full py-2 px-4 text-white rounded ${
+            className={`w-full py-2 px-4 text-white rounded text-sm sm:text-base ${
               cart.cartItems.length === 0
                 ? 'bg-gray-400 cursor-not-allowed'
                 : 'bg-blue-600 hover:bg-blue-700'
@@ -231,7 +231,7 @@ const PlaceOrderScreen = () => {
             {cart.paymentMethod === 'Esewa' ? 'Pay with Esewa' : 'Place Order'}
           </button>
 
-          {isLoading && <>Loading... </>}
+          {isLoading && <span className="text-sm">Loading... </span>}
         </div>
       </div>
     </div>

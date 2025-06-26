@@ -32,16 +32,19 @@ const PaymentPage = (props) => {
 	return (
 		<div>
 			<Banner title={props.title} />
-			<div className="flex flex-col items-center gap-5 mb-10">
+			<div className="flex flex-col items-center gap-5 mb-10 px-2 sm:px-0">
 				<CheckoutSteps step1 step2 step3 />
-				<form onSubmit={submitHandler} className="w-1/3 flex flex-col gap-6">
-					<p className="text-xl font-semibold text-gray-600">
+				<form
+					onSubmit={submitHandler}
+					className="p-2 w-full sm:w-2/3 md:w-1/2 lg:w-1/3 flex flex-col gap-6"
+				>
+					<p className="text-lg sm:text-xl font-semibold text-gray-600">
 						Select Payment Method
 					</p>
 
-					<div className="flex gap-2 text-xl">
+					<div className="flex gap-2 text-base sm:text-xl">
 						<input
-							className="border rounded p-2 text-lg"
+							className="border rounded p-2 text-base sm:text-lg"
 							type="radio"
 							id="esewa"
 							name="paymentMethod"
@@ -53,9 +56,9 @@ const PaymentPage = (props) => {
 					</div>
 
 					{!hasSubscription && (
-						<div className="flex gap-2 text-xl">
+						<div className="flex gap-2 text-base sm:text-xl">
 							<input
-								className="border rounded p-2 text-lg"
+								className="border rounded p-2 text-base sm:text-lg"
 								type="radio"
 								id="cod"
 								name="paymentMethod"
@@ -69,7 +72,7 @@ const PaymentPage = (props) => {
 
 					<button
 						type="submit"
-						className="py-3 px-7 bg-green-800 text-lg text-white font-semibold rounded hover:bg-green-700 hover:cursor-pointer"
+						className="py-3 px-7 bg-green-800 text-base sm:text-lg text-white font-semibold rounded hover:bg-green-700 hover:cursor-pointer"
 					>
 						Continue
 					</button>
