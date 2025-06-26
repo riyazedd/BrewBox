@@ -86,7 +86,7 @@ const getMyOrders = asyncHandler(async (req, res) => {
 // @access  Private
 const getOrderById = asyncHandler(async (req, res) => {
   const order = await Order.findById(req.params.id)
-    .populate('user', 'name email')
+    .populate('user', 'name email number')
     .populate('orderItems.product', 'category');
 
   if (order) {
@@ -160,7 +160,7 @@ const updateOrderToDelivered = asyncHandler(async (req, res) => {
 // @route   GET /api/orders
 // @access  Private/Admin
 const getOrders = asyncHandler(async (req, res) => {
-  const orders = await Order.find({}).populate('user', 'id name')
+  const orders = await Order.find({}).populate('user', 'id name number email')
   .populate('orderItems.product', 'category');
   res.json(orders);
 });

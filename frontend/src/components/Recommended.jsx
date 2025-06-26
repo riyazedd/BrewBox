@@ -1,9 +1,9 @@
 import React from 'react';
 import ProductCard from './ProductCard';
-import { useGetRecommendedProductsQuery } from '../slices/productApiSlice';
+import { useGetRecommendedProductsQuery } from '../slices/productApiSlice'
 
-const Recommended = ({ userId }) => {
-  const { data, isLoading, error } = useGetRecommendedProductsQuery(userId);
+const Recommended = () => {
+  const { data, error, isLoading } = useGetRecommendedProductsQuery();
 
   return (
     <div className="flex flex-col items-center w-full">

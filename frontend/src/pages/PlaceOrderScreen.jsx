@@ -29,34 +29,54 @@ const PlaceOrderScreen = () => {
   const itemsPrice = cart.itemsPrice;
   const taxPrice = cart.taxPrice;
   const totalPrice = cart.totalPrice;
+  // const totalAmount = itemsPrice+taxPrice;
+  // console.log(totalPrice, itemsPrice, taxPrice);
 
   const placeOrderHandler = async () => {
     if (cart.paymentMethod === 'Esewa') {
-      // Generate UUID and signature **here**, only on click
-      const uid = uuidv4();
-      const itemsPriceStr = Number(itemsPrice).toFixed(2);
-      const taxPriceStr = Number(taxPrice).toFixed(2);
-      const totalAmountStr = Number(totalPrice).toFixed(2);
+  const uid = uuidv4();
+  const itemsPriceNum = Number(itemsPrice);
+  const taxPriceNum = Number(taxPrice);
+  const shippingPriceNum = Number(cart.shippingPrice);
+  const serviceChargeNum = 0;
+  const totalAmountNum = itemsPriceNum + taxPriceNum + serviceChargeNum + shippingPriceNum;
 
-      const message = `total_amount=${totalAmountStr},transaction_uuid=${uid},product_code=EPAYTEST`;
-      const esewaSecret = import.meta.env.VITE_ESEWASECRET;
-      const hash = CryptoJS.HmacSHA256(message, esewaSecret);
-      const signature = CryptoJS.enc.Base64.stringify(hash);
+  const itemsPriceStr = itemsPriceNum.toFixed(2);
+  const taxPriceStr = taxPriceNum.toFixed(2);
+  const shippingPriceStr = shippingPriceNum.toFixed(2);
+  const serviceChargeStr = serviceChargeNum.toFixed(2);
+  const totalAmountStr = totalAmountNum.toFixed(2);
 
-      // Set the hidden form inputs dynamically before submitting
-      if (esewaFormRef.current) {
-        const form = esewaFormRef.current;
-        form.amount.value = itemsPriceStr;
-        form.tax_amount.value = taxPriceStr;
-        form.total_amount.value = totalAmountStr;
-        form.transaction_uuid.value = uid;
-        form.signature.value = signature;
+  const message = `total_amount=${totalAmountStr},transaction_uuid=${uid},product_code=EPAYTEST`;
+  const esewaSecret = import.meta.env.VITE_ESEWASECRET;
+  const hash = CryptoJS.HmacSHA256(message, esewaSecret);
+  const signature = CryptoJS.enc.Base64.stringify(hash);
 
-        setEsewaFormSubmitted(true);
-        form.submit();
-      }
-      return;
-    }
+  // 🔐 Save to localStorage for recovery after redirect
+  localStorage.setItem("cartItems", JSON.stringify(cart.cartItems));
+  localStorage.setItem("shippingAddress", JSON.stringify(cart.shippingAddress));
+  localStorage.setItem("paymentMethod", cart.paymentMethod);
+  localStorage.setItem("itemsPrice", itemsPrice);
+  localStorage.setItem("shippingPrice", cart.shippingPrice);
+  localStorage.setItem("taxPrice", taxPrice);
+  localStorage.setItem("totalPrice", totalPrice);
+
+  if (esewaFormRef.current) {
+    const form = esewaFormRef.current;
+    form.amount.value = itemsPriceStr;
+    form.tax_amount.value = taxPriceStr;
+    form.total_amount.value = totalAmountStr;
+    form.product_service_charge.value = serviceChargeStr;
+    form.product_delivery_charge.value = shippingPriceStr;
+    form.transaction_uuid.value = uid;
+    form.signature.value = signature;
+
+    setEsewaFormSubmitted(true);
+    form.submit();
+  }
+  return;
+}
+
 
     // Normal order process
     try {
@@ -190,7 +210,7 @@ const PlaceOrderScreen = () => {
               <input type="hidden" name="transaction_uuid" />
               <input type="hidden" name="product_code" value="EPAYTEST" />
               <input type="hidden" name="product_service_charge" value="0" />
-              <input type="hidden" name="product_delivery_charge" value="0" />
+              <input type="hidden" name="product_delivery_charge"/>
               <input type="hidden" name="success_url" value="http://localhost:5173/payment_success" />
               <input type="hidden" name="failure_url" value="http://localhost:5173/failure" />
               <input type="hidden" name="signed_field_names" value="total_amount,transaction_uuid,product_code" />

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useCreateOrderMutation } from "../slices/ordersApiSlice";
 import { clearCartItems } from "../slices/cartSlice";
 import { useNavigate } from "react-router-dom";
@@ -8,19 +8,22 @@ import { toast } from "react-toastify";
 const EsewaSuccessPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const cart = useSelector((state) => state.cart);
   const [createOrder] = useCreateOrderMutation();
-  const hasOrderedRef = useRef(false); // 🔒 prevent multiple order creation
+  const hasOrderedRef = useRef(false); // 🔒 prevent duplicate order
 
   useEffect(() => {
     const placeOrderAfterEsewa = async () => {
-      if (hasOrderedRef.current) return; // 🛑 if already ordered
+      if (hasOrderedRef.current) return;
       hasOrderedRef.current = true;
 
       try {
-        const cartItems = cart.cartItems && cart.cartItems.length
-          ? cart.cartItems
-          : JSON.parse(localStorage.getItem("cartItems") || "[]");
+        const cartItems = JSON.parse(localStorage.getItem("cartItems") || "[]");
+        const shippingAddress = JSON.parse(localStorage.getItem("shippingAddress") || "{}");
+        const paymentMethod = localStorage.getItem("paymentMethod") || "Esewa";
+        const itemsPrice = Number(localStorage.getItem("itemsPrice") || "0");
+        const shippingPrice = Number(localStorage.getItem("shippingPrice") || "0");
+        const taxPrice = Number(localStorage.getItem("taxPrice") || "0");
+        const totalPrice = Number(localStorage.getItem("totalPrice") || "0");
 
         if (!cartItems.length) {
           toast.error("No cart items found.");
@@ -29,22 +32,35 @@ const EsewaSuccessPage = () => {
         }
 
         const res = await createOrder({
-          orderItems: cartItems.map(item => ({
+          orderItems: cartItems.map((item) => ({
             name: item.product_name,
             qty: item.quantity,
             image: item.image[0],
             price: item.price,
             product: item._id,
+            size: item.size, // Pass size from client
+            grind: item.grind, // Pass grind from client
+            roast: item.roast, // Pass roast from client
           })),
-          shippingAddress: cart.shippingAddress,
-          paymentMethod: "Esewa",
-          itemsPrice: cart.itemsPrice,
-          shippingPrice: cart.shippingPrice,
-          taxPrice: cart.taxPrice,
-          totalPrice: cart.totalPrice,
+          shippingAddress,
+          paymentMethod,
+          itemsPrice,
+          shippingPrice,
+          taxPrice,
+          totalPrice,
         }).unwrap();
 
         dispatch(clearCartItems());
+
+        // Clean up localStorage
+        localStorage.removeItem("cartItems");
+        localStorage.removeItem("shippingAddress");
+        localStorage.removeItem("paymentMethod");
+        localStorage.removeItem("itemsPrice");
+        localStorage.removeItem("shippingPrice");
+        localStorage.removeItem("taxPrice");
+        localStorage.removeItem("totalPrice");
+
         navigate(`/order/${res._id}`);
       } catch (err) {
         toast.error(err?.data?.message || "Order creation failed after payment.");

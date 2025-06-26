@@ -14,8 +14,8 @@ import {
 import { protect, admin } from '../middleware/authMiddleware.js';
 import checkObjectId from '../middleware/checkObjectId.js';
 
-router.get('/recommend/:userId', getRecommendedProducts);
 router.get('/top', getTopProducts);
+router.get('/recommend', getRecommendedProducts);
 router.route('/').get(getProducts).post(protect, admin, createProduct);
 router.route('/:id/reviews').post(protect, checkObjectId, createProductReview);
 router

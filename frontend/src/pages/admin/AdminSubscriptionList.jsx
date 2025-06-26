@@ -213,7 +213,7 @@ const AdminSubscriptionList = () => {
 												{nextDelivery}
 											</td>
 											<td>
-												<Link to={`/order/${order._id}`}>
+												<Link to={`/admin/order/${order._id}`}>
 													<button className="px-4 py-2 rounded bg-gray-200 hover:cursor-pointer">
 														Details
 													</button>

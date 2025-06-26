@@ -60,10 +60,10 @@ export const productsApiSlice = apiSlice.injectEndpoints({
       keepUnusedDataFor: 5,
     }),
     getRecommendedProducts: builder.query({
-      query: (userId) => `${PRODUCTS_URL}/recommend/${userId}`,
+      query: () => `${PRODUCTS_URL}/recommend`,
       keepUnusedDataFor: 5,
     }),
-  }),
+  })
 });
 
 export const {

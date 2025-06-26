@@ -18,6 +18,7 @@ const OrderPage = () => {
     isLoading,
     error,
   } = useGetOrderDetailsQuery(orderId);
+  console.log(order)
 
   const [deliverOrder, { isLoading: loadingDeliver }] = useDeliverOrderMutation();
   const { userInfo } = useSelector((state) => state.auth);
@@ -44,6 +45,9 @@ const OrderPage = () => {
             <h2 className="text-xl font-semibold mb-2">Shipping</h2>
             <p>
               <span className="font-medium">Name:</span> {order.user.name}
+            </p>
+            <p>
+              <span className="font-medium">Contact:</span> {order.user.number}
             </p>
             <p>
               <span className="font-medium">Email:</span>{' '}
@@ -80,7 +84,7 @@ const OrderPage = () => {
               <ul className="space-y-4">
                 {order.orderItems.map((item, index) => (
                   <li key={index} className="flex justify-between items-center">
-                   <div className='flex items-center gap-4'>
+                   <div className='flex items-center gap-2'>
                      <img
                       src={`${
                         import.meta.env.VITE_BACKEND_URL || "http://localhost:3000"
@@ -88,8 +92,8 @@ const OrderPage = () => {
                       alt={item.name}
                       className="w-12 h-12 object-cover rounded"
                     />
-                    <div className="flex gap-2">
-                      <Link to={`/product/${item.product}`} className="text-blue-600 underline text-lg">
+                    <div className="flex">
+                      <Link to={`/product/${item.product}`} className="text-blue-600 underline text-lg text-overflow: ellipsis;">
                         {item.name}
                       </Link>
                       <div className="text-lg text-gray-600 capitalize">

@@ -72,7 +72,7 @@ const AdminAddProduct = () => {
 	};
 
 	return (
-		<div className="mx-20 my-10">
+		<div className="">
 			<Link
 				to="/admin/productlist"
 				className="bg-green-700 text-white px-2 py-1 rounded"
