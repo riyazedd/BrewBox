@@ -154,31 +154,35 @@ const AdminDashboard = () => {
           </div>
 
           {/* Charts */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="bg-white p-4 rounded shadow">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+            <div className="bg-white p-4 rounded shadow min-h-[320px] sm:min-h-[400px] flex items-center justify-center">
               <Bar
                 data={barChartData}
                 options={{
                   responsive: true,
+                  maintainAspectRatio: false,
                   plugins: {
                     legend: { display: false },
                     title: { display: true, text: 'Sales, Revenue & Subscriptions' },
                   },
                   scales: { y: { beginAtZero: true } },
                 }}
+                height={320}
               />
             </div>
-            <div className="bg-white p-4 rounded shadow">
+            <div className="bg-white p-4 rounded shadow min-h-[320px] sm:min-h-[400px] flex items-center justify-center">
               <Line
                 data={lineChartData}
                 options={{
                   responsive: true,
+                  maintainAspectRatio: false,
                   plugins: {
                     legend: { display: false },
                     title: { display: true, text: 'Monthly Revenue (Last 6 Months)' },
                   },
                   scales: { y: { beginAtZero: true } },
                 }}
+                height={320}
               />
             </div>
           </div>
