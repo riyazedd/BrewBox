@@ -54,7 +54,7 @@ const CartPage = (props) => {
 															src={`${
 													import.meta.env.VITE_BACKEND_URL ||
 													"http://localhost:3000"
-												}${item.image}`}
+												}${item.image[0]}`}
 															alt="Product"
 														/>
 														<span className="font-semibold text-xs sm:text-sm md:text-base">
