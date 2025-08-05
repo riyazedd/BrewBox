@@ -63,6 +63,10 @@ const ProductDetails = () => {
 	}, [product]);
 
 	const addToCartHandler = () => {
+		if (product.countInStock !== undefined && quantity > product.countInStock) {
+			toast.error(`Cannot add more than available stock (${product.countInStock})`);
+			return;
+		}
 		dispatch(addToCart({ ...product, quantity, price, size, grind, roast }));
 	};
 
@@ -186,10 +190,17 @@ const ProductDetails = () => {
 													Rs {price}
 												</p>
 											</div>
-											<div className="mt-4 sm:mt-5 flex flex-col sm:flex-row gap-3">
+											<div className="mt-4 sm:mt-5 flex flex-col sm:flex-row gap-3 items-start sm:items-center">
 												<QuantitySelector
 													quantity={quantity}
-													setQuantity={setQuantity}
+													setQuantity={val => {
+														if (product.countInStock !== undefined && val > product.countInStock) {
+															setQuantity(product.countInStock);
+															toast.error(`Cannot select more than available stock (${product.countInStock})`);
+														} else {
+															setQuantity(val);
+														}
+													}}
 												/>
 												<button
 													onClick={addToCartHandler}
@@ -197,6 +208,9 @@ const ProductDetails = () => {
 												>
 													ADD TO CART
 												</button>
+												{product.countInStock !== undefined && (
+													<span className="ml-0 sm:ml-4 mt-2 sm:mt-0 text-lg text-gray-600">In stock: <span className="font-semibold">{product.countInStock}</span></span>
+												)}
 											</div>
 										</div>
 									</div>

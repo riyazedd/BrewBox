@@ -70,6 +70,14 @@ const addOrderItems = asyncHandler(async (req, res) => {
 
   const createdOrder = await order.save();
 
+  // Decrease stock for each ordered product
+  for (const item of dbOrderItems) {
+    await Product.updateOne(
+      { _id: item.product },
+      { $inc: { countInStock: -item.qty } }
+    );
+  }
+
   res.status(201).json(createdOrder);
 });
 

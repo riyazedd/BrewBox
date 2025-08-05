@@ -93,7 +93,7 @@ const OrderPage = () => {
                         className="w-10 h-10 sm:w-12 sm:h-12 object-cover rounded"
                       />
                       <div className="flex flex-col sm:flex-row items-start sm:items-center">
-                        <Link to={`/product/${item.product}`} className="text-blue-600 underline text-base sm:text-lg truncate max-w-[120px] sm:max-w-xs">
+                        <Link to={`/product/${item._id}`} className="text-blue-600 underline text-base sm:text-lg truncate max-w-[120px] sm:max-w-xs">
                           {item.name}
                         </Link>
                         <div className="text-xs sm:text-lg text-gray-600 capitalize ml-0 sm:ml-2">

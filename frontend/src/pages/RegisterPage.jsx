@@ -36,14 +36,28 @@ const RegisterPage = (props) => {
       if(password!==confirmPassword){
         toast.error("Password donot match!");
         return;
-      }else{
-        try{
-          const res = await register({name,email,password,number}).unwrap();
-          dispatch(setCredentials({...res,}));
-          navigate(redirect);
-        }catch(err){
-          toast.error(err?.data?.message || err.error);
-        }
+      }
+      // Phone number validation: must be 10 digits and start with 98
+      if(!/^98\d{8}$/.test(number)){
+        toast.error("Phone number must be 10 digits and start with 98");
+        return;
+      }
+      // Email validation: must be a valid email format
+      if(!/^\S+@\S+\.\S+$/.test(email)){
+        toast.error("Please enter a valid email address");
+        return;
+      }
+      // Password validation: must be at least 8 characters
+      if(password.length < 8){
+        toast.error("Password must be at least 8 characters long");
+        return;
+      }
+      try{
+        const res = await register({name,email,password,number}).unwrap();
+        dispatch(setCredentials({...res,}));
+        navigate(redirect);
+      }catch(err){
+        toast.error(err?.data?.message || err.error);
       }
     }
 

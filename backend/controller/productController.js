@@ -8,8 +8,10 @@ const analyzer = new natural.SentimentAnalyzer('English', natural.PorterStemmer,
 
 // Utility: Compute sentiment score from a comment
 function analyzeSentiment(comment) {
-  const tokens = tokenizer.tokenize(comment.toLowerCase());
+  const tokens = tokenizer.tokenize(comment ? comment.toLowerCase() : '');
+  console.log("Tokens:", JSON.stringify(tokens));
   const filtered = tokens.filter(word => !stopwords.has(word));
+  console.log("Filtered:", JSON.stringify(filtered));
   return analyzer.getSentiment(filtered);
 }
 
@@ -215,8 +217,16 @@ const getRecommendedProducts = asyncHandler(async (req, res) => {
       (sum, review) => sum + (review.sentimentScore || analyzeSentiment(review.comment)),
       0
     );
+    // Log tokens and filtered for each review
+    product.reviews.forEach(review => {
+      const tokens = tokenizer.tokenize(review.comment ? review.comment.toLowerCase() : '');
+      const filtered = tokens.filter(word => !stopwords.has(word));
+      console.log(`Product: ${product.product_name}, Review: ${review.comment}`);
+      console.log("Tokens:", JSON.stringify(tokens));
+      console.log("Filtered:", JSON.stringify(filtered));
+    });
     const avgSentiment = product.reviews.length > 0 ? sentimentSum / product.reviews.length : 0;
-    // console.log(`Product: ${product.product_name}, Avg Sentiment: ${avgSentiment}`);
+    console.log(`Product: ${product.product_name}, Avg Sentiment: ${avgSentiment}`);
     return { ...product, avgSentiment };
   });
 
